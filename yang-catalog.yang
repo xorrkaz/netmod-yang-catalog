@@ -371,6 +371,31 @@ module yang-catalog {
        "The current maturity of the module with respect to the body that created it.
         This allows one to understand where the module is in its overall life cycle.";
    }
+   container source-url {
+     description "";
+     container online {
+       description "";
+       leaf owner {
+         description "";
+         type string;
+       }
+       leaf repository {
+         description "";
+         type string;
+       }
+       leaf path {
+         description "";
+         type string;
+       }
+     }
+     container local {
+       description "";
+       leaf path {
+         description "";
+         type string;
+       }
+     }
+   }
    description
      "Grouping of YANG module metadata that extends the common list defined in the YANG
       Module Library (RFC 7895).";

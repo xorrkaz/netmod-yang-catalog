@@ -1,0 +1,57 @@
+module  module-metadata {
+  namespace "foo:bar";
+  prefix s;
+
+  organization
+    "";
+  description
+    "";
+
+  container modules {
+    description "";
+    list module {
+      description "";
+      leaf conformance-type {
+        type string;
+        description "";
+      }
+      leaf maturity-level {
+        type string;
+        description "";
+      }
+      leaf author-email {
+        type string;
+        description "";
+      }
+      leaf document-name {
+        type string;
+        description "";
+      }
+      leaf reference {
+        type string;
+        description "";
+      }
+      container organization-specific-metadata {
+        description "";
+        anyxml data {
+          description "";
+        }
+      }
+      container source-file {
+        description "";
+        leaf repo {
+          type string;
+          description "";
+        }
+        leaf owner {
+          type string;
+          description "";
+        }
+        leaf path {
+          type string;
+          description "";
+        }
+      }
+    }
+  }
+}

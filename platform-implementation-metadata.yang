@@ -1,0 +1,56 @@
+module platform-implementation-metadata {
+ namespace "bar:foo";
+ prefix v;
+
+ organization
+   "";
+
+ description
+   "";
+
+
+
+ list platforms {
+     key "vendor name software-version software-flavor";
+     description "";
+     leaf vendor {
+       type string;
+       description "";
+     }
+     leaf name {
+       type string;
+       description "";
+     }
+     leaf-list models {
+       type string;
+       description "";
+     }
+     leaf software-flavor {
+       type string;
+       description "";
+     }
+     leaf software-version {
+       type string;
+       description "";
+     }
+     leaf os-type {
+       type string;
+       description "";
+     }
+     container capabilities-file {
+       description "";
+       leaf owner {
+         type string;
+         description "";
+       }
+       leaf path {
+         type string;
+         description "";
+       }
+       leaf repo {
+           type string;
+           description "";
+       }
+     }
+   }
+}
