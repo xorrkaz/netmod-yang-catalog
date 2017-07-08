@@ -371,30 +371,37 @@ module yang-catalog {
        "The current maturity of the module with respect to the body that created it.
         This allows one to understand where the module is in its overall life cycle.";
    }
-   container source-url {
-     description "";
+   container source-file {
      container online {
-       description "";
        leaf owner {
-         description "";
          type string;
+         description
+           "Username or ID of the owner of the version control system repository.";
        }
        leaf repository {
-         description "";
          type string;
+         description
+           "URI location of the version control system repository.";
        }
        leaf path {
-         description "";
          type string;
+         description
+           "Location within the repository of the module file.";
        }
+       description
+         "Networked version control system location of the module file.";
      }
      container local {
-       description "";
        leaf path {
-         description "";
          type string;
+         description
+           "Fully-qualified path to the module file.";
        }
+       description
+         "Local file system location of the module file.";
      }
+     description
+       "Location of the module file either within the network or on a local file system.";
    }
    description
      "Grouping of YANG module metadata that extends the common list defined in the YANG
