@@ -432,4 +432,14 @@ module yang-catalog {
      "Grouping of YANG module metadata that extends the common list defined in the YANG
       Module Library (RFC 7895).";
  }
+
+ grouping organization-specific {
+   container organization-specific-metadata {
+     description "";
+     anyxml data {
+       description "";
+     }
+   }
+   description "";
+ }
 }

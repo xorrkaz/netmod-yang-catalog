@@ -2,6 +2,10 @@ module  module-metadata {
   namespace "foo:bar";
   prefix s;
 
+ import yang-catalog {
+   prefix yc;
+ }
+
   organization
     "";
   description
@@ -11,6 +15,7 @@ module  module-metadata {
     description "";
     list module {
       description "";
+      uses yc:organization-specific;
       leaf conformance-type {
         type string;
         description "";
@@ -20,7 +25,7 @@ module  module-metadata {
         description "";
       }
       leaf author-email {
-        type string;
+        type yc:email-address;
         description "";
       }
       leaf document-name {
@@ -31,16 +36,10 @@ module  module-metadata {
         type string;
         description "";
       }
-      container organization-specific-metadata {
-        description "";
-        anyxml data {
-          description "";
-        }
-      }
       container source-file {
         description "";
         leaf repo {
-          type string;
+          type yc:url;
           description "";
         }
         leaf owner {
@@ -48,7 +47,7 @@ module  module-metadata {
           description "";
         }
         leaf path {
-          type string;
+          type yc:path;
           description "";
         }
       }

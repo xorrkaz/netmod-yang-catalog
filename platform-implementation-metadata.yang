@@ -2,13 +2,15 @@ module platform-implementation-metadata {
  namespace "bar:foo";
  prefix v;
 
+ import yang-catalog {
+   prefix yc;
+ }
+
  organization
    "";
 
  description
    "";
-
-
 
  list platforms {
      key "vendor name software-version software-flavor";
@@ -44,11 +46,11 @@ module platform-implementation-metadata {
          description "";
        }
        leaf path {
-         type string;
+         type yc:path;
          description "";
        }
        leaf repo {
-           type string;
+           type yc:url;
            description "";
        }
      }
