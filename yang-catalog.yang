@@ -38,7 +38,7 @@ module yang-catalog {
 
  typedef path {
    type string {
-     pattern "^[^/ \n]*(/[^/ \n]+)?$";
+     pattern "^/([^/]+)?$";
    }
    description
      "This type represents a string with path to the file.";
