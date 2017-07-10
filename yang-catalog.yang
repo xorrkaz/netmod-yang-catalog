@@ -433,13 +433,19 @@ module yang-catalog {
       Module Library (RFC 7895).";
  }
 
- grouping organization-specific {
-   container organization-specific-metadata {
-     description "";
-     anyxml data {
-       description "";
+ grouping organization-specific-metadata {
+   container ietf {
+     description "Include this container for the IETF-specific organization metadata.";
+     when "../organization= 'ietf'" {
+         description "Include this container specific metadata of the IETF.";
+     }
+     leaf ietf-wg {
+         description "Working group that authored the document containing this module.";
+         type string;
      }
    }
-   description "";
+   description "Any organization that has some specific metadata of the yang module and want them add to the
+                yang-catalog, should augment this grouping. This grouping is for any metadata that can`t be used for
+                every yang module.";
  }
 }
