@@ -27,6 +27,28 @@ module yang-catalog {
      YANG Catalog <https://yangcatalog.org>";
  }
 
+ typedef url {
+   description "This type represents a string with url";
+   type string {
+     pattern
+       "/^(https?://)?([da-z.-]+).([a-z.]{2,6})([w .-]*)*/?$/";
+   }
+ }
+
+ typedef path {
+   description "This type represents a string with path to the file";
+   type string {
+     pattern "^[^/ \n]*(/[^/ \n]+)?$";
+   }
+ }
+
+ typedef email-address {
+   description "This type represents a string with an email address";
+   type string {
+     pattern "[A-Z0-9._%-]+@[A-Z0-9._%-]+.[A-Z]{2,4}";
+   }
+ }
+
  container catalog {
    description
      "Root container of yang-catalog holding two main branches -
@@ -243,7 +265,7 @@ module yang-catalog {
         or that provides additional context about the module.";
    }
    leaf author-email {
-     type string;
+     type email-address;
      description
       "Contact email of the author who created this module.";
    }
@@ -379,12 +401,12 @@ module yang-catalog {
            "Username or ID of the owner of the version control system repository.";
        }
        leaf repository {
-         type string;
+         type url;
          description
            "URI location of the version control system repository.";
        }
        leaf path {
-         type string;
+         type path;
          description
            "Location within the repository of the module file.";
        }
@@ -393,7 +415,7 @@ module yang-catalog {
      }
      container local {
        leaf path {
-         type string;
+         type path;
          description
            "Fully-qualified path to the module file.";
        }
