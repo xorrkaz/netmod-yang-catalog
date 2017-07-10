@@ -30,7 +30,7 @@ module yang-catalog {
  typedef url {
    type string {
      pattern
-       '^(https?://)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*/?$';
+       "(https?://)?([0-9a-z.-]+)[.]([a-z.]{2,6})([/a-zA-Z0-9_ .-]*)*/?";
    }
    description
      "This type represents a string with url.";
@@ -38,7 +38,7 @@ module yang-catalog {
 
  typedef path {
    type string {
-     pattern '^([A-Za-z]:|[\w-]+(\.[\w-]+)*)?(([/\\][\w.-]+)+)$';
+     pattern '([A-Za-z]:|[\w-]+(\.[\w-]+)*)?(([/\\][\w.-]+)+)';
    }
    description
      "This type represents a string with path to the file.";
@@ -46,7 +46,7 @@ module yang-catalog {
 
  typedef email-address {
    type string {
-     pattern "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+([.][a-zA-Z0-9-]+)*$";
+     pattern "[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9-]+[.][A-Za-z]{2,4}";
    }
    description
      "This type represents a string with an email address.";
