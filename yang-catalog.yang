@@ -28,25 +28,28 @@ module yang-catalog {
  }
 
  typedef url {
-   description "This type represents a string with url";
    type string {
      pattern
-       "/^(https?://)?([da-z.-]+).([a-z.]{2,6})([w .-]*)*/?$/";
+       "^(https?://)?([0-9a-z.-]+)[.]([a-z.]{2,6})([/a-zA-Z0-9_ .-]*)*/?$";
    }
+   description
+     "This type represents a string with url.";
  }
 
  typedef path {
-   description "This type represents a string with path to the file";
    type string {
      pattern "^[^/ \n]*(/[^/ \n]+)?$";
    }
+   description
+     "This type represents a string with path to the file.";
  }
 
  typedef email-address {
-   description "This type represents a string with an email address";
    type string {
-     pattern "[A-Z0-9._%-]+@[A-Z0-9._%-]+.[A-Z]{2,4}";
+     pattern "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+([.][a-zA-Z0-9-]+)*$";
    }
+   description
+     "This type represents a string with an email address.";
  }
 
  container catalog {
