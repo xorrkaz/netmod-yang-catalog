@@ -33,7 +33,6 @@ module module-metadata {
       key "name revision";
       description
         "List of modules for which metadata is being provided.";
-      uses yc:organization-specific-metadata;
       leaf name {
         type yang:yang-identifier;
         description
@@ -48,6 +47,14 @@ module module-metadata {
           "The YANG module or submodule revision date.
            A zero-length string is used if no revision statement
            is present in the YANG module or submodule.";
+      }
+      leaf organization {
+        type string;
+        description
+          "This statement defines the party responsible for this
+           module.  The argument is a string that is used to specify a textual
+           description of the organization(s) under whose auspices this module
+           was developed.";
       }
       leaf conformance-type {
         type enumeration {
@@ -117,7 +124,7 @@ module module-metadata {
       leaf author-email {
         type yc:email-address;
         description
-          "Contact email of the author who created this module.";
+          "Contact email of the author who is responsible for this module.";
       }
       leaf reference {
         type string;
@@ -144,6 +151,11 @@ module module-metadata {
         }
         description
           "Networked version control system location of the module file.";
+      }
+      container organization-specific-metadata {
+        description
+          "Container for organization-specific data.";
+        uses yc:organization-specific-metadata;
       }
     }
   }
