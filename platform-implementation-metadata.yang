@@ -27,7 +27,7 @@ module platform-implementation-metadata {
     leaf vendor {
       type string;
       description
-        "Organization that created this module.";
+        "Organization that implements this module.";
     }
     leaf name {
       type string;

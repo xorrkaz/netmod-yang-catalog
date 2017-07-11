@@ -209,7 +209,7 @@ module yang-catalog {
        leaf vendor {
          type string;
          description
-           "Organization that created this module.";
+           "Organization that implements this module.";
        }
        leaf platform {
          type string;
