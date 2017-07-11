@@ -33,6 +33,7 @@ module module-metadata {
       key "name revision";
       description
         "List of modules for which metadata is being provided.";
+      uses yc:non-extractable-fields;
       leaf name {
         type yang:yang-identifier;
         description
@@ -47,14 +48,6 @@ module module-metadata {
           "The YANG module or submodule revision date.
            A zero-length string is used if no revision statement
            is present in the YANG module or submodule.";
-      }
-      leaf organization {
-        type string;
-        description
-          "This statement defines the party responsible for this
-           module.  The argument is a string that is used to specify a textual
-           description of the organization(s) under whose auspices this module
-           was developed.";
       }
       leaf conformance-type {
         type enumeration {
@@ -91,64 +84,8 @@ module module-metadata {
           "Indicates the type of conformance the server is claiming
            for the YANG module identified by this entry.";
       }
-
-      leaf maturity-level {
-        type enumeration {
-          enum ratified {
-            value 0;
-            description
-              "Maturity of a module that is fully approved (e.g., a standard).";
-          }
-          enum working-group {
-            value 1;
-            description
-              "Maturity of a module that is actively being developed by a organization towards ratification.";
-          }
-          enum individual {
-            value 2;
-            description
-              "Maturity of a module that has been initially created, but has no official
-               organization-level status.";
-          }
-        }
-        description
-          "The current maturity of the module with respect to the body that created it.
-           This allows one to understand where the module is in its overall life cycle.";
-      }
-      leaf document-name {
-        type string;
-          description
-            "The name of the document from which the module was extracted or taken;
-             or that provides additional context about the module.";
-      }
-      leaf author-email {
-        type yc:email-address;
-        description
-          "Contact email of the author who is responsible for this module.";
-      }
-      leaf reference {
-        type string;
-          description
-            "A string that is used to specify a textual cross-reference to an external document, either
-             another module that defines related management information, or a document that provides
-             additional information relevant to this definition.";
-      }
       container source-file {
-        leaf repo {
-          type yc:url;
-          description
-            "URI location of the version control system repository.";
-        }
-        leaf owner {
-          type string;
-          description
-            "Username or ID of the owner of the version control system repository.";
-        }
-        leaf path {
-          type yc:path;
-          description
-            "Location within the repository of the module file.";
-        }
+        uses yc:online-source-file;
         description
           "Networked version control system location of the module file.";
       }

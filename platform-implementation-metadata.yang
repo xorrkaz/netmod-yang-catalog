@@ -62,21 +62,7 @@ module platform-implementation-metadata {
          specific operating system.";
     }
     container capabilities-file {
-      leaf repo {
-          type yc:url;
-          description
-            "URI location of the version control system repository.";
-      }
-      leaf owner {
-        type string;
-        description
-          "Username or ID of the owner of the version control system repository.";
-      }
-      leaf path {
-        type yc:path;
-        description
-          "Location within the repository of the module file.";
-      }
+      uses yc:online-source-file;
       description
         "Networked version control system location of the module file.";
     }

@@ -261,17 +261,7 @@ module yang-catalog {
  }
 
  grouping module-data {
-   leaf document-name {
-     type string;
-     description
-       "The name of the document from which the module was extracted or taken;
-        or that provides additional context about the module.";
-   }
-   leaf author-email {
-     type email-address;
-     description
-      "Contact email of the author who created this module.";
-   }
+   uses non-extractable-fields;
    leaf compilation-status {
      type enumeration {
        enum PASSED {
@@ -308,13 +298,6 @@ module yang-catalog {
        "Result of the compilation explaining specifically what error or warning occurred.
         This is not existing if compilation status is PASSED.";
    }
-   leaf reference {
-     type string;
-     description
-       "A string that is used to specify a textual cross-reference to an external document, either
-        another module that defines related management information, or a document that provides
-        additional information relevant to this definition.";
-   }
    leaf prefix {
      type string;
      description
@@ -332,14 +315,6 @@ module yang-catalog {
         YANG language was used in developing the module. The statement's
         argument is a string. If present, it MUST contain the value 1,
         which is the current YANG version and the default value.";
-   }
-   leaf organization {
-     type string;
-     description
-       "This statement defines the party responsible for this
-        module.  The argument is a string that is used to specify a textual
-        description of the organization(s) under whose auspices this module
-        was developed.";
    }
    leaf description {
      type string;
@@ -373,46 +348,9 @@ module yang-catalog {
      }
      description "Whether a file contains a YANG module or sub-module.";
    }
-   leaf maturity-level {
-     type enumeration {
-       enum ratified {
-         value 0;
-         description
-           "Maturity of a module that is fully approved (e.g., a standard).";
-       }
-       enum working-group {
-         value 1;
-         description
-           "Maturity of a module that is actively being developed by a organization towards ratification.";
-       }
-       enum individual {
-         value 2;
-         description
-           "Maturity of a module that has been initially created, but has no official
-            organization-level status.";
-       }
-     }
-     description
-       "The current maturity of the module with respect to the body that created it.
-        This allows one to understand where the module is in its overall life cycle.";
-   }
    container source-file {
      container online {
-       leaf owner {
-         type string;
-         description
-           "Username or ID of the owner of the version control system repository.";
-       }
-       leaf repository {
-         type url;
-         description
-           "URI location of the version control system repository.";
-       }
-       leaf path {
-         type path;
-         description
-           "Location within the repository of the module file.";
-       }
+       uses online-source-file;
        description
          "Networked version control system location of the module file.";
      }
@@ -451,5 +389,76 @@ module yang-catalog {
      "Any organization that has some specific metadata of the yang module and want them add to the
       yang-catalog, should augment this grouping. This grouping is for any metadata that can`t be used for
       every yang module.";
+ }
+ grouping online-source-file {
+   leaf owner {
+     type string;
+     description
+       "Username or ID of the owner of the version control system repository.";
+     }
+   leaf repository {
+     type url;
+     description
+       "URI location of the version control system repository.";
+   }
+   leaf path {
+     type path;
+     description
+       "Location within the repository of the module file.";
+   }
+ }
+ grouping non-extractable-fields {
+   grouping organization-data {
+     leaf organization {
+       type string;
+       description
+         "This statement defines the party responsible for this
+          module.  The argument is a string that is used to specify a textual
+          description of the organization(s) under whose auspices this module
+          was developed.";
+     }
+   }
+   uses organization-data;
+   leaf maturity-level {
+     type enumeration {
+       enum ratified {
+         value 0;
+         description
+           "Maturity of a module that is fully approved (e.g., a standard).";
+       }
+       enum working-group {
+         value 1;
+         description
+           "Maturity of a module that is actively being developed by a organization towards ratification.";
+       }
+       enum individual {
+         value 2;
+         description
+           "Maturity of a module that has been initially created, but has no official
+            organization-level status.";
+       }
+     }
+     description
+       "The current maturity of the module with respect to the body that created it.
+        This allows one to understand where the module is in its overall life cycle.";
+   }
+   leaf document-name {
+     type string;
+     description
+       "The name of the document from which the module was extracted or taken;
+        or that provides additional context about the module.";
+   }
+   leaf author-email {
+     type yc:email-address;
+     description
+       "Contact email of the author who is responsible for this module.";
+   }
+   leaf reference {
+     type string;
+     description
+       "A string that is used to specify a textual cross-reference to an external document, either
+        another module that defines related management information, or a document that provides
+        additional information relevant to this definition.";
+   }
  }
 }
