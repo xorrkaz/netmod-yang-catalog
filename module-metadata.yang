@@ -1,13 +1,15 @@
-module  module-metadata {
-  namespace "foo:bar";
+module module-metadata {
+  namespace "https://yangcatalog.org/yang";
   prefix mod-meta;
 
- import yang-catalog {
-   prefix yc;
- }
+  import yang-catalog {
+    prefix yc;
+  }
 
   organization
     "yangcatalog.org";
+  contact
+    "Yang Catalog <info@yangcatalog.org>";
   description
     "This module describes the API input needed to upload metadata to the
      yangcatalog.org catalog.";
@@ -15,8 +17,8 @@ module  module-metadata {
   revision 2017-07-07 {
     description
       "Initial revision.";
-    reference "
-      YANG Catalog <https://yangcatalog.org>";
+    reference
+      "YANG Catalog <https://yangcatalog.org>";
   }
 
   container modules {
