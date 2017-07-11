@@ -27,10 +27,12 @@ module module-metadata {
   }
 
   container modules {
-    description "";
+    description
+      "Container for a list of modules for which metadata is being provided.";
     list module {
       key "name revision";
-      description "";
+      description
+        "List of modules for which metadata is being provided.";
       uses yc:organization-specific-metadata;
       leaf name {
         type yang:yang-identifier;
