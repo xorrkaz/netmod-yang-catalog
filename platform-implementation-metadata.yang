@@ -1,6 +1,6 @@
 module platform-implementation-metadata {
-  namespace "bar:foo";
-  prefix pim;
+  namespace "https://yangcatalog.org/yang";
+  prefix platform-meta;
 
   import yang-catalog {
     prefix yc;
@@ -10,10 +10,16 @@ module platform-implementation-metadata {
     "yangcatalog.org";
   contact
     "Yang Catalog <info@yangcatalog.org>";
-
   description
     "This module describes the API input needed to upload metadata to the
      yangcatalog.org catalog.";
+
+  revision 2017-07-07 {
+    description
+      "Initial revision.";
+    reference
+      "YANG Catalog <https://yangcatalog.org>";
+  }
 
   list platforms {
     key "vendor name software-version software-flavor";
