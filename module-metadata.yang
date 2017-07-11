@@ -33,7 +33,7 @@ module module-metadata {
       key "name revision";
       description
         "List of modules for which metadata is being provided.";
-      uses yc:non-extractable-fields;
+      uses yc:shared-module-fields;
       leaf name {
         type yang:yang-identifier;
         description

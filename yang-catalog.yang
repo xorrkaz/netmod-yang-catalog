@@ -407,18 +407,15 @@ module yang-catalog {
        "Location within the repository of the module file.";
    }
  }
- grouping non-extractable-fields {
-   grouping organization-data {
-     leaf organization {
-       type string;
-       description
-         "This statement defines the party responsible for this
-          module.  The argument is a string that is used to specify a textual
-          description of the organization(s) under whose auspices this module
-          was developed.";
-     }
+ grouping shared-module-fields {
+   leaf organization {
+     type string;
+     description
+       "This statement defines the party responsible for this
+        module.  The argument is a string that is used to specify a textual
+        description of the organization(s) under whose auspices this module
+        was developed.";
    }
-   uses organization-data;
    leaf maturity-level {
      type enumeration {
        enum ratified {
@@ -460,5 +457,6 @@ module yang-catalog {
         another module that defines related management information, or a document that provides
         additional information relevant to this definition.";
    }
+   description "This fields are shared among yang-catalog and its API";
  }
 }
