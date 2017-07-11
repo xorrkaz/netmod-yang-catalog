@@ -457,6 +457,7 @@ module yang-catalog {
         another module that defines related management information, or a document that provides
         additional information relevant to this definition.";
    }
-   description "This fields are shared among yang-catalog and its API";
+   description
+     "These fields are shared among the yang-catalog and its API.";
  }
 }
