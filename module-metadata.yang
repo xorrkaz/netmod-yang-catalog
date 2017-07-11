@@ -25,7 +25,7 @@ module module-metadata {
     description "";
     list module {
       description "";
-      uses yc:organization-specific;
+      uses yc:organization-specific-metadata;
       leaf conformance-type {
         type string;
         description "";
