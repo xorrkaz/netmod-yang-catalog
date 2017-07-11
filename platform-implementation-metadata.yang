@@ -1,58 +1,78 @@
 module platform-implementation-metadata {
- namespace "bar:foo";
- prefix v;
+  namespace "bar:foo";
+  prefix pim;
 
- import yang-catalog {
-   prefix yc;
- }
+  import yang-catalog {
+    prefix yc;
+  }
 
- organization
-   "";
+  organization
+    "yangcatalog.org";
+  contact
+    "Yang Catalog <info@yangcatalog.org>";
 
- description
-   "";
+  description
+    "This module describes the API input needed to upload metadata to the
+     yangcatalog.org catalog.";
 
- list platforms {
-     key "vendor name software-version software-flavor";
-     description "";
-     leaf vendor {
-       type string;
-       description "";
-     }
-     leaf name {
-       type string;
-       description "";
-     }
-     leaf-list models {
-       type string;
-       description "";
-     }
-     leaf software-flavor {
-       type string;
-       description "";
-     }
-     leaf software-version {
-       type string;
-       description "";
-     }
-     leaf os-type {
-       type string;
-       description "";
-     }
-     container capabilities-file {
-       description "";
-       leaf owner {
-         type string;
-         description "";
-       }
-       leaf path {
-         type yc:path;
-         description "";
-       }
-       leaf repo {
-           type yc:url;
-           description "";
-       }
-     }
-   }
+  list platforms {
+    key "vendor name software-version software-flavor";
+    description "";
+    leaf vendor {
+      type string;
+      description
+        "Organization that created this module.";
+    }
+    leaf name {
+      type string;
+      description
+        "Platform on which this module is implemented.";
+    }
+    leaf-list models {
+      type string;
+      description "";
+    }
+    leaf software-flavor {
+      type string;
+      description
+        "A variation of a specific version where
+         YANG model support may be different.  Depending on the vendor, this could
+         be a license, additional software component, or a feature set.";
+    }
+    leaf software-version {
+      type string;
+      description
+        "Name of the version of software.  With respect to most network device appliances,
+         this will be the operating system version.  But for other YANG module
+         implementation, this would be a version of appliance software.  Ultimately,
+         this should correspond to a version string that will be recognizable by
+         the consumers of the platform.";
+    }
+    leaf os-type {
+      type string;
+      description
+        "Type of the operating system using this module.  This is primarily useful if
+         the software implementing the module is an application that requires a
+         specific operating system.";
+    }
+    container capabilities-file {
+      leaf repo {
+          type yc:url;
+          description
+            "URI location of the version control system repository.";
+      }
+      leaf owner {
+        type string;
+        description
+          "Username or ID of the owner of the version control system repository.";
+      }
+      leaf path {
+        type yc:path;
+        description
+          "Location within the repository of the module file.";
+      }
+      description
+        "Networked version control system location of the module file.";
+    }
+  }
 }
