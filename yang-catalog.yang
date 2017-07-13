@@ -38,7 +38,7 @@ module yang-catalog {
 
  typedef path {
    type string {
-     pattern '([A-Za-z]:|[\w-]+(\.[\w-]+)*)?(([/\\][\w.-]+)+)';
+     pattern '([A-Za-z]:|[\w-]+(\.[\w-]+)*)?(([/\\][\w@.-]+)+)';
    }
    description
      "This type represents a string with path to the file.";
@@ -261,7 +261,7 @@ module yang-catalog {
  }
 
  grouping module-data {
-   uses non-extractable-fields;
+   uses shared-module-fields;
    leaf compilation-status {
      type enumeration {
        enum PASSED {
