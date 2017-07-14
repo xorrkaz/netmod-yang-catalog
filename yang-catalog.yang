@@ -20,6 +20,13 @@ module yang-catalog {
     as well as obtain a list of available modules for a given
     vendor's platform and specific software release.";
 
+ revision 2017-07-14 {
+   description
+     "Modularize some of the leafs and create typedefs so they
+      can be shared between the API input modules.";
+   reference
+     "YANG Catalog <https://yangcatalog.org>";
+ }
  revision 2017-07-03 {
    description
      "Initial revision.";
