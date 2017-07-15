@@ -2,8 +2,16 @@ module yang-catalog {
  namespace "urn:ietf:params:xml:ns:yang:yang-catalog";
  prefix yc;
 
+ import ietf-yang-types {
+   prefix yang;
+ }
+
  import ietf-yang-library {
    prefix yanglib;
+ }
+
+ import ietf-inet-types {
+  prefix inet;
  }
 
  organization
@@ -71,7 +79,20 @@ module yang-catalog {
    container modules {
      description
        "Container holding the list of modules";
-     uses yanglib:module-list;
+     list module {
+       key "name revision";
+       description
+         "Each entry represents one revision of one module
+          currently supported by the server.";
+       uses yang-lib-module-fields;
+       list submodule {
+         key "name revision";
+         description
+           "Each entry represents one submodule within the
+            parent module.";
+         uses yang-lib-module-fields;
+       }
+     }
    } // end of modules
 
    container vendors {
@@ -416,6 +437,44 @@ module yang-catalog {
    description
      "Grouping that provides nodes to identify where a YANG module lives
       in either a revision control system or in a local file system.";
+ }
+ grouping yang-lib-module-fields {
+   leaf name {
+     type yang:yang-identifier;
+       description
+         "The YANG module or submodule name.";
+   }
+   leaf revision {
+     type union {
+       type yanglib:revision-identifier;
+       type string { length 0; }
+     }
+     description
+       "The YANG module or submodule revision date.
+        A zero-length string is used if no revision statement
+        is present in the YANG module or submodule.";
+   }
+   leaf namespace {
+     type inet:uri;
+     mandatory true;
+     description
+       "The XML namespace identifier for this module.";
+   }
+   leaf schema {
+      type inet:uri;
+      description
+        "Contains a URL that represents the YANG schema
+         resource for this module or submodule.
+         This leaf will only be present if there is a URL
+         available for retrieval of the schema for this entry.";
+    }
+    description
+      "These are a subset of leafs from the yang-library (RFC 7895) that provide some
+       extractable fields for catalog modules.  The module-list grouping cannot be
+       used from yang-library as modules themselves cannot have conformance without
+       a server.";
+    reference
+      "RFC7895 YANG Module Library : module-list grouping";
  }
  grouping shared-module-fields {
    leaf generated-from {
