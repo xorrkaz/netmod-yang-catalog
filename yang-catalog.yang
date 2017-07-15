@@ -436,18 +436,27 @@ module yang-catalog {
  grouping online-source-file {
    leaf owner {
      type string;
+     mandatory true;
      description
        "Username or ID of the owner of the version control system repository.";
      }
    leaf repository {
      type string;
+     mandatory true;
      description
        "URI location of the version control system repository.";
    }
    leaf path {
      type path;
+     mandatory true;
      description
        "Location within the repository of the module file.";
+   }
+   leaf tag {
+     type string;
+     description
+       "Revision control system tag to use to find the module.  If this is not
+        specified, the head of the repository is used.";
    }
    description
      "Grouping that provides nodes to identify where a YANG module lives
