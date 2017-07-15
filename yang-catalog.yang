@@ -290,6 +290,14 @@ module yang-catalog {
 
  grouping module-data {
    uses shared-module-fields;
+   leaf organization {
+     type string;
+     description
+       "This statement defines the party responsible for this
+        module.  The argument is a string that is used to specify a textual
+        description of the organization(s) under whose auspices this module
+        was developed.";
+   }
    leaf compilation-status {
      type enumeration {
        enum PASSED {
@@ -502,14 +510,6 @@ module yang-catalog {
        "This statement defines weather the module was generated or not.
         Default value is set to not-applicable, which means that module
         was created manualy and not generated.";
-   }
-   leaf organization {
-     type string;
-     description
-       "This statement defines the party responsible for this
-        module.  The argument is a string that is used to specify a textual
-        description of the organization(s) under whose auspices this module
-        was developed.";
    }
    leaf maturity-level {
      type enumeration {
