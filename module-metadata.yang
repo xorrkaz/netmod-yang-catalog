@@ -58,41 +58,6 @@ module module-metadata {
                 description of the organization(s) under whose auspices this module
                 was developed.";
       }
-      leaf conformance-type {
-        type enumeration {
-          enum implement {
-            description
-              "Indicates that the server implements one or more
-               protocol-accessible objects defined in the YANG module
-               identified in this entry.  This includes deviation
-               statements defined in the module.
-
-               For YANG version 1.1 modules, there is at most one
-               module entry with conformance type 'implement' for a
-               particular module name, since YANG 1.1 requires that,
-               at most, one revision of a module is implemented.
-
-               For YANG version 1 modules, there SHOULD NOT be more
-               than one module entry for a particular module name.";
-          }
-          enum import {
-            description
-              "Indicates that the server imports reusable definitions
-               from the specified revision of the module but does
-               not implement any protocol-accessible objects from
-               this revision.
-
-               Multiple module entries for the same module name MAY
-               exist.  This can occur if multiple modules import the
-               same module but specify different revision dates in
-               the import statements.";
-          }
-        }
-        mandatory true;
-        description
-          "Indicates the type of conformance the server is claiming
-           for the YANG module identified by this entry.";
-      }
       container source-file {
         uses yc:online-source-file;
         description
