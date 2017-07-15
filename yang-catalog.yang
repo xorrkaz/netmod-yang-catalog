@@ -452,10 +452,10 @@ module yang-catalog {
      description
        "Location within the repository of the module file.";
    }
-   leaf tag {
+   leaf branch {
      type string;
      description
-       "Revision control system tag to use to find the module.  If this is not
+       "Revision control system branch or tag to use to find the module.  If this is not
         specified, the head of the repository is used.";
    }
    description
