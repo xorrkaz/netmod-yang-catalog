@@ -441,6 +441,12 @@ module yang-catalog {
            "Maturity of a module that has been initially created, but has no official
             organization-level status.";
        }
+       enum not-applicable {
+         value 3;
+         description
+           "The maturity level is not used for vendor-supplied models, and thus all vendor
+            modules will have a maturity of not-applicable";
+       }
      }
      description
        "The current maturity of the module with respect to the body that created it.

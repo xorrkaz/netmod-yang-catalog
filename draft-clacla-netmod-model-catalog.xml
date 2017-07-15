@@ -346,15 +346,19 @@ module: yang-catalog
               "Maturity of a module that has been initially created, but has no official
                organization-level status.";
           }
+          enum not-applicable {
+            value 3;
+            description
+              "The maturity level is not used for vendor-supplied models, and thus all vendor
+               modules will have a maturity of not-applicable";
+          }
         }
       }
     </artwork>
         </figure>
         <t>
        This enumeration mapping has been implemented for the YANG modules from IETF and BBF.
-       With respect to vendor-specific modules, this same enumeration should be used and mapped
-       to the internal vendor release or development names.  Once a module has been completed,
-       fully tested, and is stable, its maturity level should be "ratified".
+       The "maturity-level" MUST be "not-applicable" for all vendor-supplied modules.
     </t>
       </section>
       <section anchor="implementation" title="Implementation">
