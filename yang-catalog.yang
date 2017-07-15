@@ -85,6 +85,12 @@ module yang-catalog {
          "Each entry represents one revision of one module
           currently supported by the server.";
        uses yang-lib-module-fields;
+       leaf namespace {
+         type inet:uri;
+         mandatory true;
+         description
+           "The XML namespace identifier for this module.";
+       }
        list submodule {
          key "name revision organization";
          description
@@ -461,12 +467,6 @@ module yang-catalog {
        "The YANG module or submodule revision date.
         A zero-length string is used if no revision statement
         is present in the YANG module or submodule.";
-   }
-   leaf namespace {
-     type inet:uri;
-     mandatory true;
-     description
-       "The XML namespace identifier for this module.";
    }
    leaf schema {
       type inet:uri;
