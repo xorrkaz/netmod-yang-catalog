@@ -440,7 +440,7 @@ module yang-catalog {
        "Username or ID of the owner of the version control system repository.";
      }
    leaf repository {
-     type url;
+     type string;
      description
        "URI location of the version control system repository.";
    }
@@ -451,7 +451,7 @@ module yang-catalog {
    }
    description
      "Grouping that provides nodes to identify where a YANG module lives
-      in either a revision control system or in a local file system.";
+      in a networked revision control system.";
  }
  grouping yang-lib-module-fields {
    leaf name {
