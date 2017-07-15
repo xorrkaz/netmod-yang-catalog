@@ -19,6 +19,13 @@ module module-metadata {
     "This module describes the API input needed to upload metadata to the
      yangcatalog.org catalog.";
 
+  revision 2017-07-15 {
+    description
+      "Remove conformance data as this can only be determined with an
+       implementation.";
+     reference
+       "YANG Catalog <https://yangcatalog.org>";
+  }
   revision 2017-07-07 {
     description
       "Initial revision.";
