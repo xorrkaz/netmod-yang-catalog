@@ -415,6 +415,32 @@ module yang-catalog {
    }
  }
  grouping shared-module-fields {
+   leaf generated-from {
+     type enumeration {
+       enum mib {
+         value 0;
+         description "Module generated from MIB";
+       }
+       enum code {
+         value 1;
+         description "Module generated from code";
+       }
+       enum not-applicable {
+         value 2;
+         description
+           "Module was not generated but it was created";
+       }
+       enum native {
+         value 3;
+         description "Module generated from module internal structure";
+       }
+     }
+     default not-applicable;
+     description
+       "This statement defines weather the module was generated or not.
+        Default value is set to not-applicable, which means that module
+        was created manualy and not generated.";
+   }
    leaf organization {
      type string;
      description
