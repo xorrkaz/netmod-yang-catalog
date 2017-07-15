@@ -85,6 +85,7 @@ module yang-catalog {
          "Each entry represents one revision of one module
           currently supported by the server.";
        uses yang-lib-module-fields;
+       uses organization-specific-metadata;
        leaf namespace {
          type inet:uri;
          mandatory true;
