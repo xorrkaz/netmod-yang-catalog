@@ -178,7 +178,7 @@ module yang-catalog {
                          retrieved for each module.";
                        leaf name {
                          type leafref {
-                           path "../../../../../../../../../../../modules/module/name";
+                           path "/catalog/modules/module/name";
                          }
                          description
                            "Reference to a name of the module that is contained in specific vendor, platform,
@@ -186,7 +186,7 @@ module yang-catalog {
                        }
                        leaf revision {
                          type leafref {
-                           path "../../../../../../../../../../../modules/module/revision";
+                           path "/catalog/modules/module/revision";
                          }
                          description
                            "Reference to a revision of the module that is contained in specific vendor,
@@ -421,6 +421,9 @@ module yang-catalog {
      description
        "Location within the repository of the module file.";
    }
+   description
+     "Grouping that provides nodes to identify where a YANG module lives
+      in either a revision control system or in a local file system.";
  }
  grouping shared-module-fields {
    leaf generated-from {
