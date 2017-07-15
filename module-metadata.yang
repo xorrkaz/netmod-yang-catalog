@@ -50,15 +50,13 @@ module module-metadata {
            is present in the YANG module or submodule.";
       }
       leaf organization {
-        type leaf {
-          type string;
-          mandatory True;
-          description
-                 "This statement defines the party responsible for this
-                  module.  The argument is a string that is used to specify a textual
-                  description of the organization(s) under whose auspices this module
-                  was developed.";
-        }
+        type string;
+        mandatory true;
+        description
+               "This statement defines the party responsible for this
+                module.  The argument is a string that is used to specify a textual
+                description of the organization(s) under whose auspices this module
+                was developed.";
       }
       leaf conformance-type {
         type enumeration {
