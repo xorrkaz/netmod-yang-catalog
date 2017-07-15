@@ -86,7 +86,7 @@ module yang-catalog {
           currently supported by the server.";
        uses yang-lib-module-fields;
        list submodule {
-         key "name revision";
+         key "name revision organization";
          description
            "Each entry represents one submodule within the
             parent module.";
