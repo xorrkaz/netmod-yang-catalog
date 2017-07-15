@@ -92,7 +92,7 @@ module yang-catalog {
            "The XML namespace identifier for this module.";
        }
        list submodule {
-         key "name revision organization";
+         key "name revision";
          description
            "Each entry represents one submodule within the
             parent module.";
