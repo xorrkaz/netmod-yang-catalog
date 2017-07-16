@@ -42,15 +42,6 @@ module yang-catalog {
      YANG Catalog <https://yangcatalog.org>";
  }
 
- typedef url {
-   type string {
-     pattern
-       '(https?://)([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*/?';
-   }
-   description
-     "This type represents a string with url.";
- }
-
  typedef path {
    type string {
      pattern '([A-Za-z]:|[\w-]+(\.[\w-]+)*)?(([/\\][\w@.-]+)+)';
@@ -562,7 +553,7 @@ module yang-catalog {
        "Contact email of the author who is responsible for this module.";
    }
    leaf reference {
-     type string;
+     type inet:uri;
      description
        "A string that is used to specify a textual cross-reference to an external document, either
         another module that defines related management information, or a document that provides
