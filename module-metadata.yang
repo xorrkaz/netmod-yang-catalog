@@ -70,11 +70,7 @@ module module-metadata {
         description
           "Networked version control system location of the module file.";
       }
-      container organization-specific-metadata {
-        description
-          "Container for organization-specific data.";
-        uses yc:organization-specific-metadata;
-      }
+      uses yc:organization-specific-metadata;
     }
   }
 }
