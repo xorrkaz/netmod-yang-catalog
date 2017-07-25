@@ -42,6 +42,30 @@ module yang-catalog {
      YANG Catalog <https://yangcatalog.org>";
  }
 
+ /*
+  * Identities
+  */
+ identity protocol {
+   description
+     "Abstract base identity for a YANG-based protocol.";
+ }
+
+ identity netconf {
+   base protocol;
+   description
+     "Protocol identity for NETCONF as described in RFC 6241.";
+ }
+
+ identity restconf {
+   base protocol;
+   description
+     "Protocol identity for RESTCONF as described in RFC 8040.";
+ }
+
+ /*
+  * Typedefs
+  */
+
  typedef path {
    type string {
      pattern '([A-Za-z]:|[\w-]+(\.[\w-]+)*)?(([/\\][\w@.-]+)+)';
@@ -71,11 +95,22 @@ module yang-catalog {
      description
        "Container holding the list of modules";
      list module {
-       key "name revision";
+       key "name revision organization";
        description
          "Each entry represents one revision of one module
-          currently supported by the server.";
-       uses yang-lib-module-fields;
+          for one organization.";
+       uses yang-lib-common-leafs;
+       uses yang-lib-schema-leaf;
+       uses catalog-module-metadata;
+       leaf organization {
+         type string;
+         mandatory true;
+         description
+                "This statement defines the party responsible for this
+                 module.  The argument is a string that is used to specify a textual
+                 description of the organization(s) under whose auspices this module
+                 was developed.";
+       }
        uses organization-specific-metadata;
        leaf namespace {
          type inet:uri;
@@ -88,7 +123,65 @@ module yang-catalog {
          description
            "Each entry represents one submodule within the
             parent module.";
-         uses yang-lib-module-fields;
+         uses yang-lib-common-leafs;
+         uses yang-lib-schema-leaf;
+       }
+       container implementations {
+         description
+           "Container holding lists of per-module implementation details.";
+         list implementation{
+           key "vendor platform software-version software-flavor";
+           description
+             "List of module implementations.";
+           leaf vendor {
+             type string;
+             description
+               "Organization that implements this module.";
+           }
+           leaf platform {
+             type string;
+             description
+               "Platform on which this module is implemented.";
+           }
+           leaf software-version {
+             type string;
+             description
+               "Name of the version of software.  With respect to most network device appliances,
+                this will be the operating system version.  But for other YANG module
+                implementation, this would be a version of appliance software.  Ultimately,
+                this should correspond to a version string that will be recognizable by
+                the consumers of the platform.";
+           }
+           leaf software-flavor {
+             type string;
+             description
+               "A variation of a specific version where
+                YANG model support may be different.  Depending on the vendor, this could
+                be a license, additional software component, or a feature set.";
+           }
+           leaf os-version {
+             type string;
+             description
+               "Version of the operating system using this module.  This is primarily useful if
+                the software implementing the module is an application that requires a specific
+                operating system.";
+           }
+           leaf feature-set {
+             type string;
+             description
+               "An optional feature of the software that is required in order to implement this
+                module.  Some form of this must be incorporated in software-version or
+                software-flavor, but can be broken out here for additional clarity.";
+           }
+           leaf os-type {
+             type string;
+             description
+               "Type of the operating system using this module.  This is primarily useful if
+                the software implementing the module is an application that requires a
+                specific operating system.";
+           }
+           uses yang-lib-imlementation-leafs;
+         }
        }
      }
    } // end of modules
@@ -157,21 +250,14 @@ module yang-catalog {
                      list protocol {
                        key name;
                        description
-                         "YANG-based protocol that is used on the device.  This enumeration will
-                          is expected to be augmented to list other protocol names.";
+                         "YANG-based protocol that is used on the device.  New identities
+                          are expected to be added to address other YANG-based protocols.";
                        leaf name {
-                         type enumeration {
-                           enum netconf {
-                             description
-                               "NETCONF protocol described in RFC 6241";
-                           }
-                           enum restconf {
-                             description
-                               "RESTCONF protocol described in RFC 8040";
-                           }
+                         type identityref {
+                           base protocol;
                          }
                          description
-                           "Name of the YANG-based protocol that is supported.";
+                           "Identity of the YANG-based protocol that is supported.";
                        } // end of name
                        leaf protocol-version {
                          type string;
@@ -190,7 +276,7 @@ module yang-catalog {
                      description
                        "Container holding list of modules.";
                      list module {
-                       key "name revision";
+                       key "name revision organization";
                        description
                         "List of references to YANG modules under specific vendor, platform, software-version,
                          software-flavor.  Using these references, the complete set of metadata can be
@@ -211,6 +297,14 @@ module yang-catalog {
                            "Reference to a revision of the module that is contained in specific vendor,
                             platform, software-version, software-flavor.";
                        }
+                       leaf organization {
+                         type leafref {
+                           path "/catalog/modules/module/organization";
+                         }
+                         description
+                           "Reference to the authoring organization of the module for the implemented
+                             module.";
+                       }
                      } // end of list module
                    } // end of container modules
                  } // end of software-flavor
@@ -223,100 +317,29 @@ module yang-catalog {
    } // end of vendors
  } //end of catalog
 
- augment "/catalog/modules/module" {
-   uses module-data;
-   container implementations {
-     description
-       "Container holding lists of per-module implementation details.";
-     list implementation{
-       key "vendor platform software-version software-flavor";
-       description
-         "List of module implementations.";
-       leaf vendor {
-         type string;
-         description
-           "Organization that implements this module.";
-       }
-       leaf platform {
-         type string;
-         description
-           "Platform on which this module is implemented.";
-       }
-       leaf software-version {
-         type string;
-         description
-           "Name of the version of software.  With respect to most network device appliances,
-            this will be the operating system version.  But for other YANG module
-            implementation, this would be a version of appliance software.  Ultimately,
-            this should correspond to a version string that will be recognizable by
-            the consumers of the platform.";
-       }
-       leaf software-flavor {
-         type string;
-         description
-           "A variation of a specific version where
-            YANG model support may be different.  Depending on the vendor, this could
-            be a license, additional software component, or a feature set.";
-       }
-       leaf os-version {
-         type string;
-         description
-           "Version of the operating system using this module.  This is primarily useful if
-            the software implementing the module is an application that requires a specific
-            operating system.";
-       }
-       leaf feature-set {
-         type string;
-         description
-           "An optional feature of the software that is required in order to implement this
-            module.  Some form of this must be incorporated in software-version or
-            software-flavor, but can be broken out here for additional clarity.";
-       }
-       leaf os-type {
-         type string;
-         description
-           "Type of the operating system using this module.  This is primarily useful if
-            the software implementing the module is an application that requires a
-            specific operating system.";
-       }
-     }
-   }
-   description
-     "This table augments the per-module metadata set and provides details about
-      vendor implementations for each module.";
- }
-
- grouping module-data {
+ grouping catalog-module-metadata {
    uses shared-module-fields;
-   leaf organization {
-     type string;
-     description
-       "This statement defines the party responsible for this
-        module.  The argument is a string that is used to specify a textual
-        description of the organization(s) under whose auspices this module
-        was developed.";
-   }
    leaf compilation-status {
      type enumeration {
-       enum PASSED {
+       enum passed {
          value 0;
          description
            "In case that all compilers were able to compile this YANG module without
            any error/warning.";
        }
-       enum PASSED-WITH-WARNINGS {
+       enum passed-with-warnings {
          value 1;
          description
            "In case that all compilers were able to compile this YANG module without
            any error, but at least one of them caught some warning.";
        }
-       enum FAILED {
+       enum failed {
          value 2;
          description
            "In case that at least one of compilers found some error while
            compiling this YANG module.";
        }
-       enum MISSING {
+       enum unknown {
          value 3;
          description
            "In case that there is not sufficient information about compilation status.";
@@ -334,6 +357,7 @@ module yang-catalog {
    }
    leaf prefix {
      type string;
+     config false;
      description
        "Statement of yang that is used to define the prefix associated with
         the module and its namespace. The prefix statement's argument is
@@ -344,6 +368,7 @@ module yang-catalog {
    leaf yang-version {
      type string;
      default "1.0";
+     config false;
      description
        "The optional yang-version statement specifies which version of the
         YANG language was used in developing the module. The statement's
@@ -352,6 +377,7 @@ module yang-catalog {
    }
    leaf description {
      type string;
+     config false;
      description
        "This statement takes as an argument a string that
         contains a human-readable textual description of this definition.
@@ -362,6 +388,7 @@ module yang-catalog {
    }
    leaf contact {
      type string;
+     config false;
      description
        "This statement provides contact information for the module.
         The argument is a string that is used to specify contact information
@@ -380,6 +407,7 @@ module yang-catalog {
          description "If YANG file contains sub-module.";
        }
      }
+     config false;
      description "Whether a file contains a YANG module or sub-module.";
    }
    container source-file {
@@ -435,7 +463,7 @@ module yang-catalog {
      type string;
      mandatory true;
      description
-       "URI location of the version control system repository.";
+       "The name of the repository.";
    }
    leaf path {
      type path;
@@ -453,7 +481,7 @@ module yang-catalog {
      "Grouping that provides nodes to identify where a YANG module lives
       in a networked revision control system.";
  }
- grouping yang-lib-module-fields {
+ grouping yang-lib-common-leafs {
    leaf name {
      type yang:yang-identifier;
        description
@@ -469,6 +497,14 @@ module yang-catalog {
         A zero-length string is used if no revision statement
         is present in the YANG module or submodule.";
    }
+   description
+     "The YANG module or submodule revision date.
+      A zero-length string is used if no revision statement
+      is present in the YANG module or submodule.";
+    reference
+      "RFC7895 YANG Module Library : common-leafs grouping";
+ }
+ grouping yang-lib-schema-leaf {
    leaf schema {
       type inet:uri;
       description
@@ -483,27 +519,90 @@ module yang-catalog {
        used from yang-library as modules themselves cannot have conformance without
        a server.";
     reference
-      "RFC7895 YANG Module Library : module-list grouping";
+      "RFC7895 YANG Module Library : schema-leaf grouping";
+ }
+ grouping yang-lib-imlementation-leafs {
+   leaf-list feature {
+     type yang:yang-identifier;
+     description
+      "List of YANG feature names from this module that are
+       supported by the server, regardless of whether they are
+       defined in the module or any included submodule.";
+   }
+   list deviation {
+     key "name revision";
+     description
+       "List of YANG deviation module names and revisions
+        used by this server to modify the conformance of
+        the module associated with this entry.  Note that
+        the same module can be used for deviations for
+        multiple modules, so the same entry MAY appear
+        within multiple 'module' entries.
+        The deviation module MUST be present in the 'module'
+        list, with the same name and revision values.
+        The 'conformance-type' value will be 'implement' for
+        the deviation module.";
+     uses yang-lib-common-leafs;
+   }
+   leaf conformance-type {
+     type enumeration {
+       enum implement {
+         description
+           "Indicates that the server implements one or more
+            protocol-accessible objects defined in the YANG module
+            identified in this entry.  This includes deviation
+            statements defined in the module.
+            For YANG version 1.1 modules, there is at most one
+            module entry with conformance type 'implement' for a
+            particular module name, since YANG 1.1 requires that,
+            at most, one revision of a module is implemented.
+            For YANG version 1 modules, there SHOULD NOT be more
+            than one module entry for a particular module name.";
+       }
+       enum import {
+         description
+           "Indicates that the server imports reusable definitions
+            from the specified revision of the module but does
+            not implement any protocol-accessible objects from
+            this revision.
+            Multiple module entries for the same module name MAY
+            exist.  This can occur if multiple modules import the
+            same module but specify different revision dates in
+            the import statements.";
+       }
+     }
+     mandatory true;
+     description
+      "Indicates the type of conformance the server is claiming
+       for the YANG module identified by this entry.";
+   }
+   description
+     "This is a set of leafs extracted from the yang-library that are
+      specific to server implementations.";
+   reference
+     "RFC7895 YANG Module Library : module-list grouping";
  }
  grouping shared-module-fields {
    leaf generated-from {
      type enumeration {
        enum mib {
          value 0;
-         description "Module generated from MIB";
+         description "Module generated from Structure of Management Information (SMI)
+           MIB";
        }
        enum code {
          value 1;
-         description "Module generated from code";
+         description "Module generated automatically from code.";
        }
        enum not-applicable {
          value 2;
          description
-           "Module was not generated but it was created";
+           "Module was not generated but it was authored manually.";
        }
        enum native {
          value 3;
-         description "Module generated from module internal structure";
+         description "Module generated from platform internal or
+           proprietary structure.";
        }
      }
      default not-applicable;
@@ -519,12 +618,12 @@ module yang-catalog {
          description
            "Maturity of a module that is fully approved (e.g., a standard).";
        }
-       enum working-group {
+       enum adopted {
          value 1;
          description
            "Maturity of a module that is actively being developed by a organization towards ratification.";
        }
-       enum individual {
+       enum initial {
          value 2;
          description
            "Maturity of a module that has been initially created, but has no official
