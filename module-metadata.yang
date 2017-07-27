@@ -5,12 +5,7 @@ module module-metadata {
   import yang-catalog {
     prefix yc;
   }
-  import ietf-yang-library {
-    prefix yanglib;
-  }
-  import ietf-yang-types {
-    prefix yang;
-  }
+
   organization
     "yangcatalog.org";
   contact
@@ -19,6 +14,14 @@ module module-metadata {
     "This module describes the API input needed to upload metadata to the
      yangcatalog.org catalog.";
 
+  revision 2017-07-27 {
+    description
+      "* Fold in the GitHub repository leafs here as they are not required
+         for the catalog.
+       * Update the name of the shared-module-leafs grouping";
+    reference
+      "YANG Catalog <https://yangcatalog.org>";
+  }
   revision 2017-07-15 {
     description
       "Remove conformance data as this can only be determined with an
@@ -33,29 +36,26 @@ module module-metadata {
       "YANG Catalog <https://yangcatalog.org>";
   }
 
+  /*
+   * Typedefs
+   */
+  typedef path {
+    type string {
+      pattern '([A-Za-z]:|[\w-]+(\.[\w-]+)*)?(([/\\][\w@.-]+)+)';
+    }
+    description
+      "This type represents a string with path to the file.";
+  }
+
   container modules {
     description
       "Container for a list of modules for which metadata is being provided.";
     list module {
-      key "name revision";
+      key "name revision organization";
       description
         "List of modules for which metadata is being provided.";
-      uses yc:shared-module-fields;
-      leaf name {
-        type yang:yang-identifier;
-        description
-          "The YANG module or submodule name.";
-      }
-      leaf revision {
-        type union {
-          type yanglib:revision-identifier;
-          type string { length 0; }
-        }
-        description
-          "The YANG module or submodule revision date.
-           A zero-length string is used if no revision statement
-           is present in the YANG module or submodule.";
-      }
+      uses yc:yang-lib-common-leafs;
+      uses yc:shared-module-leafs;
       leaf organization {
         type string;
         mandatory true;
@@ -65,12 +65,12 @@ module module-metadata {
                 description of the organization(s) under whose auspices this module
                 was developed.";
       }
+      uses yc:organization-specific-metadata;
       container source-file {
         uses yc:online-source-file;
         description
-          "Networked version control system location of the module file.";
+          "Location of the module file in a revision control system.";
       }
-      uses yc:organization-specific-metadata;
     }
   }
 }

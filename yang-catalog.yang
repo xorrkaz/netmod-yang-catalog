@@ -81,15 +81,6 @@ module yang-catalog {
  /*
   * Typedefs
   */
-
- typedef path {
-   type string {
-     pattern '([A-Za-z]:|[\w-]+(\.[\w-]+)*)?(([/\\][\w@.-]+)+)';
-   }
-   description
-     "This type represents a string with path to the file.";
- }
-
  typedef email-address {
    type string {
      pattern "[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+([.][a-zA-Z0-9-]+)*";
@@ -167,6 +158,13 @@ module yang-catalog {
                 implementation, this would be a version of appliance software.  Ultimately,
                 this should correspond to a version string that will be recognizable by
                 the consumers of the platform.";
+           }
+           leaf software-flavor {
+             type string;
+             description
+               "A variation of a specific version where
+                YANG model support may be different.  Depending on the vendor, this could
+                be a license, additional software component, or a feature set.";
            }
            uses shared-implementation-leafs;
            uses yang-lib-imlementation-leafs;
@@ -294,6 +292,7 @@ module yang-catalog {
                            "Reference to the authoring organization of the module for the implemented
                              module.";
                        }
+                       // XXX: Do we need these here???
                        uses shared-implementation-leafs;
                        uses yang-lib-imlementation-leafs;
                      } // end of list module
@@ -314,22 +313,28 @@ module yang-catalog {
      type enumeration {
        enum passed {
          description
-           "In case that all compilers were able to compile this YANG module without
-           any error/warning.";
+           "All compilers were able to compile this YANG module without
+            any errors or warnings.";
        }
        enum passed-with-warnings {
          description
-           "In case that all compilers were able to compile this YANG module without
-           any error, but at least one of them caught some warning.";
+           "All compilers were able to compile this YANG module without
+            any errors, but at least one of them caught a warning.";
        }
        enum failed {
          description
-           "In case that at least one of compilers found some error while
-           compiling this YANG module.";
+           "At least one of compilers found an error while
+            compiling this YANG module.";
+       }
+       enum pending {
+         description
+           "The module was just added to the catalog and compilation testing is still
+            in progress.";
        }
        enum unknown {
          description
-           "In case that there is not sufficient information about compilation status.";
+           "There is not sufficient information about compilation status.  This Could
+            mean compilation crashed causing it not to complete fully.";
        }
      }
      description
@@ -401,52 +406,41 @@ module yang-catalog {
      config false;
      description "Whether a file contains a YANG module or sub-module.";
    }
-   leaf module-classification {
+   leaf tree-type {
      type enumeration {
-       enum network-service {
+       enum split {
          description
-           "Network Service YANG Module that describes the configuration, state
-      	    data, operations, and notifications of abstract representations of
-            services implemented on one or multiple network elements.";
+           "This module uses a split config/operational state layout.";
        }
-       enum network-element {
+       enum nmda-compatible {
          description
-           "Network Element YANG Module that describes the configuration, state
-      	    data, operations, and notifications of specific device-centric
-            technologies or features.";
+           "This module is compatible with the Network Management Datastores
+            Architecture (NMDA) and combines config and operational state nodes.";
        }
-       enum unknown {
+       enum transitional-extra {
          description
-           "In case that there is not sufficient information about how to classify the module.";
+           "This module is derived as a '-state' module to allow for transitioning
+            to a full NMDA-compliant tree structure.";
+       }
+       enum openconfig {
+         description
+           "This module uses the Openconfig data element layout.";
+       }
+       enum unclassified {
+        description
+          "This module does not have a data element tree, or it does not belong to any category.";
        }
        enum not-applicable {
          description
-           "The YANG module abstraction type is neither a Network Service YANG Module
-            nor a Network Element YANG Module.";
+           "This module is submodule.";
        }
      }
+     config false;
      description
-       "The high-level classification of the given YANG module.";
+       "The type of data element tree used by the module as it relates to the
+        Network Management Datastores Architecture.";
      reference
-       "RFC8199 YANG Module Classification";
-   }
-   container source-file {
-     container online {
-       uses online-source-file;
-       description
-         "Networked version control system location of the module file.";
-     }
-     container local {
-       leaf path {
-         type path;
-         description
-           "Fully-qualified path to the module file.";
-       }
-       description
-         "Local file system location of the module file.";
-     }
-     description
-       "Location of the module file either within the network or on a local file system.";
+       "draft-dsdt-nmda-guidelines Guidelines for YANG Module Authors (NMDA)";
    }
    description
      "Grouping of YANG module metadata that extends the common list defined in the YANG
@@ -471,35 +465,6 @@ module yang-catalog {
      "Any organization that has some specific metadata of the yang module and want them add to the
       yang-catalog, should augment this grouping. This grouping is for any metadata that can`t be used for
       every yang module.";
- }
- grouping online-source-file {
-   leaf owner {
-     type string;
-     mandatory true;
-     description
-       "Username or ID of the owner of the version control system repository.";
-     }
-   leaf repository {
-     type string;
-     mandatory true;
-     description
-       "The name of the repository.";
-   }
-   leaf path {
-     type path;
-     mandatory true;
-     description
-       "Location within the repository of the module file.";
-   }
-   leaf branch {
-     type string;
-     description
-       "Revision control system branch or tag to use to find the module.  If this is not
-        specified, the head of the repository is used.";
-   }
-   description
-     "Grouping that provides nodes to identify where a YANG module lives
-      in a networked revision control system.";
  }
  grouping yang-lib-common-leafs {
    leaf name {
@@ -603,13 +568,6 @@ module yang-catalog {
      "RFC7895 YANG Module Library : module-list grouping";
  }
  grouping shared-implementation-leafs {
-   leaf software-flavor {
-     type string;
-     description
-       "A variation of a specific version where
-        YANG model support may be different.  Depending on the vendor, this could
-        be a license, additional software component, or a feature set.";
-   }
    leaf os-version {
      type string;
      description
@@ -702,7 +660,64 @@ module yang-catalog {
         another module that defines related management information, or a document that provides
         additional information relevant to this definition.";
    }
+   leaf module-classification {
+     type enumeration {
+       enum network-service {
+         description
+           "Network Service YANG Module that describes the configuration, state
+      	    data, operations, and notifications of abstract representations of
+            services implemented on one or multiple network elements.";
+       }
+       enum network-element {
+         description
+           "Network Element YANG Module that describes the configuration, state
+      	    data, operations, and notifications of specific device-centric
+            technologies or features.";
+       }
+       enum unknown {
+         description
+           "In case that there is not sufficient information about how to classify the module.";
+       }
+       enum not-applicable {
+         description
+           "The YANG module abstraction type is neither a Network Service YANG Module
+            nor a Network Element YANG Module.";
+       }
+     }
+     description
+       "The high-level classification of the given YANG module.";
+     reference
+       "RFC8199 YANG Module Classification";
+   }
    description
      "These leafs are shared among the yang-catalog and its API.";
+ }
+ grouping online-source-file {
+   leaf owner {
+     type string;
+     mandatory true;
+     description
+       "Username or ID of the owner of the version control system repository.";
+     }
+   leaf repository {
+     type string;
+     mandatory true;
+     description
+       "The name of the repository.";
+   }
+   leaf path {
+     type path;
+     mandatory true;
+     description
+       "Location within the repository of the module file.";
+   }
+   leaf branch {
+     type string;
+     description
+       "Revision control system branch or tag to use to find the module.  If this is not
+        specified, the head of the repository is used.";
+   }
+   description
+     "Networked version control system location of the module file.";
  }
 }

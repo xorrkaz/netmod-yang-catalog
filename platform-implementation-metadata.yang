@@ -14,6 +14,15 @@ module platform-implementation-metadata {
     "This module describes the API input needed to upload metadata to the
      yangcatalog.org catalog.";
 
+  revision 2017-07-27 {
+    description
+      "* Add implementation leafs from YANG Library
+
+       * Add a type leaf to the module-list-file in order to support
+         capabilities and YANG Library files";
+    reference
+      "YANG Catalog <https://yangcatalog.org>";
+  }
   revision 2017-07-07 {
     description
       "Initial revision.";
@@ -38,13 +47,6 @@ module platform-implementation-metadata {
       type string;
       description "";
     }
-    leaf software-flavor {
-      type string;
-      description
-        "A variation of a specific version where
-         YANG model support may be different.  Depending on the vendor, this could
-         be a license, additional software component, or a feature set.";
-    }
     leaf software-version {
       type string;
       description
@@ -54,14 +56,35 @@ module platform-implementation-metadata {
          this should correspond to a version string that will be recognizable by
          the consumers of the platform.";
     }
-    leaf os-type {
+    leaf software-flavor {
       type string;
       description
-        "Type of the operating system using this module.  This is primarily useful if
-         the software implementing the module is an application that requires a
-         specific operating system.";
+        "A variation of a specific version where
+         YANG model support may be different.  Depending on the vendor, this could
+         be a license, additional software component, or a feature set.";
     }
-    container capabilities-file {
+    uses yc:shared-implementation-leafs;
+    uses yc:yang-lib-imlementation-leafs;
+    container module-list-file {
+      leaf type {
+        type enumeration {
+          enum yang-library {
+            description
+              "The file is an instantiation of the YANG Library data.  This is
+               the preferred format as it has the most available data.";
+            reference
+              "RFC7895 YANG Module Library";
+          }
+          enum capabilities {
+            description
+              "The file is the output of a server's <hello> message including
+               its capabilities.";
+          }
+        }
+        mandatory true;
+        description
+          "The type of data to expect in the module-list-file.";
+      }
       uses yc:online-source-file;
       description
         "Networked version control system location of the module file.";
