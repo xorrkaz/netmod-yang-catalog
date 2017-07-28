@@ -28,6 +28,16 @@ module yang-catalog {
     as well as obtain a list of available modules for a given
     vendor's platform and specific software release.";
 
+ revision 2017-07-28 {
+   description
+     "* Revert config false nodes as we need to be able to set these via <edit-config>
+
+      * Make conformance-type optional as not all vendors implement yang-library
+
+      * Re-add the path typedef";
+   reference
+     "YANG Catalog <https://yangcatalog.org>";
+ }
  revision 2017-07-26 {
    description
      "A number of improvements based on YANG Doctor review:
@@ -89,6 +99,14 @@ module yang-catalog {
      "This type represents a string with an email address.";
  }
 
+ typedef path {
+   type string {
+     pattern '([A-Za-z]:|[\w-]+(\.[\w-]+)*)?(([/\\][\w@.-]+)+)';
+   }
+   description
+     "This type represents a string with path to the file.";
+ }
+
  container catalog {
    description
      "Root container of yang-catalog holding two main branches -
@@ -111,7 +129,6 @@ module yang-catalog {
        uses catalog-module-metadata;
        leaf organization {
          type string;
-         mandatory true;
          description
                 "This statement defines the party responsible for this
                  module.  The argument is a string that is used to specify a textual
@@ -349,7 +366,6 @@ module yang-catalog {
    }
    leaf prefix {
      type string;
-     config false;
      description
        "Statement of yang that is used to define the prefix associated with
         the module and its namespace. The prefix statement's argument is
@@ -368,14 +384,12 @@ module yang-catalog {
            "YANG version 1.1 as defined in RFC 7950.";
        }
      }
-     config false;
      description
        "The optional yang-version statement specifies which version of the
         YANG language was used in developing the module.";
    }
    leaf description {
      type string;
-     config false;
      description
        "This statement takes as an argument a string that
         contains a human-readable textual description of this definition.
@@ -386,7 +400,6 @@ module yang-catalog {
    }
    leaf contact {
      type string;
-     config false;
      description
        "This statement provides contact information for the module.
         The argument is a string that is used to specify contact information
@@ -403,7 +416,6 @@ module yang-catalog {
          description "If YANG file contains sub-module.";
        }
      }
-     config false;
      description "Whether a file contains a YANG module or sub-module.";
    }
    leaf tree-type {
@@ -435,7 +447,6 @@ module yang-catalog {
            "This module is submodule.";
        }
      }
-     config false;
      description
        "The type of data element tree used by the module as it relates to the
         Network Management Datastores Architecture.";
@@ -556,7 +567,9 @@ module yang-catalog {
             the import statements.";
        }
      }
-     mandatory true;
+     // Removing the mandatory true for now as not all vendors may have
+     // this information if they do not implement yang-library.
+     //mandatory true;
      description
       "Indicates the type of conformance the server is claiming
        for the YANG module identified by this entry.";

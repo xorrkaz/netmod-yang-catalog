@@ -36,17 +36,6 @@ module module-metadata {
       "YANG Catalog <https://yangcatalog.org>";
   }
 
-  /*
-   * Typedefs
-   */
-  typedef path {
-    type string {
-      pattern '([A-Za-z]:|[\w-]+(\.[\w-]+)*)?(([/\\][\w@.-]+)+)';
-    }
-    description
-      "This type represents a string with path to the file.";
-  }
-
   container modules {
     description
       "Container for a list of modules for which metadata is being provided.";
@@ -60,10 +49,10 @@ module module-metadata {
         type string;
         mandatory true;
         description
-               "This statement defines the party responsible for this
-                module.  The argument is a string that is used to specify a textual
-                description of the organization(s) under whose auspices this module
-                was developed.";
+          "This statement defines the party responsible for this
+           module.  The argument is a string that is used to specify a textual
+           description of the organization(s) under whose auspices this module
+           was developed.";
       }
       uses yc:organization-specific-metadata;
       container source-file {
