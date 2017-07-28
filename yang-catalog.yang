@@ -697,6 +697,7 @@ module yang-catalog {
             nor a Network Element YANG Module.";
        }
      }
+     mandatory true;
      description
        "The high-level classification of the given YANG module.";
      reference
