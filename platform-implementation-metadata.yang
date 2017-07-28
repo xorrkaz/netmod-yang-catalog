@@ -1,5 +1,5 @@
 module platform-implementation-metadata {
-  namespace "https://yangcatalog.org/yang";
+  namespace "https://yangcatalog.org/ns/yang/platform-implementation-metadata";
   prefix platform-meta;
 
   import yang-catalog {

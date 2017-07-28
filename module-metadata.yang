@@ -1,5 +1,5 @@
 module module-metadata {
-  namespace "https://yangcatalog.org/yang";
+  namespace "https://yangcatalog.org/ns/yang/module-metadata";
   prefix mod-meta;
 
   import yang-catalog {
