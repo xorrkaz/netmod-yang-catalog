@@ -43,9 +43,10 @@ module platform-implementation-metadata {
       description
         "Platform on which this module is implemented.";
     }
-    leaf-list models {
+    leaf-list product-ids {
       type string;
-      description "";
+      description
+        "The specific product ID or IDs to which this data applies.";
     }
     leaf software-version {
       type string;
@@ -64,7 +65,6 @@ module platform-implementation-metadata {
          be a license, additional software component, or a feature set.";
     }
     uses yc:shared-implementation-leafs;
-    uses yc:yang-lib-imlementation-leafs;
     container module-list-file {
       leaf type {
         type enumeration {
@@ -81,7 +81,7 @@ module platform-implementation-metadata {
                its capabilities.";
           }
         }
-        mandatory true;
+	default "capabilities";
         description
           "The type of data to expect in the module-list-file.";
       }
