@@ -28,6 +28,13 @@ module yang-catalog {
     as well as obtain a list of available modules for a given
     vendor's platform and specific software release.";
 
+ revision 2017-08-18 {
+   description
+     "* Reorder organization to be with the other module keys
+      * Add a belongs-to leaf to track a submodule's parent";
+   reference
+     "YANG Catalog <https://yangcatalog.org>";
+ }
  revision 2017-07-28 {
    description
      "* Revert config false nodes as we need to be able to set these via <edit-config>
@@ -125,8 +132,6 @@ module yang-catalog {
          "Each entry represents one revision of one module
           for one organization.";
        uses yang-lib-common-leafs;
-       uses yang-lib-schema-leaf;
-       uses catalog-module-metadata;
        leaf organization {
          type string;
          description
@@ -142,6 +147,8 @@ module yang-catalog {
          description
            "The XML namespace identifier for this module.";
        }
+       uses yang-lib-schema-leaf;
+       uses catalog-module-metadata;
        list submodule {
          key "name revision";
          description
@@ -417,6 +424,15 @@ module yang-catalog {
        }
      }
      description "Whether a file contains a YANG module or sub-module.";
+   }
+   leaf belongs-to {
+     when "../module-type = 'submodule'" {
+       description
+         "Include the module's parent when it is a submodule.";
+       }
+     type yang:yang-identifier;
+     description
+       "Name of the module that includes this submodule.";
    }
    leaf tree-type {
      type enumeration {
