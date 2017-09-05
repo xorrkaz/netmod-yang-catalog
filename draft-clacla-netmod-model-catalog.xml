@@ -151,6 +151,10 @@ module: yang-catalog
    |  +--rw module* [name revision organization]
    |     +--rw name                     yang:yang-identifier
    |     +--rw revision                 union
+   |     +--rw organization             string
+   |     +--rw ietf
+   |     |  +--rw ietf-wg?   string
+   |     +--rw namespace                inet:uri
    |     +--rw schema?                  inet:uri
    |     +--rw generated-from?          enumeration
    |     +--rw maturity-level?          enumeration
@@ -165,11 +169,8 @@ module: yang-catalog
    |     +--rw description?             string
    |     +--rw contact?                 string
    |     +--rw module-type?             enumeration
+   |     +--rw belongs-to?              yang:yang-identifier
    |     +--rw tree-type?               enumeration
-   |     +--rw organization             string
-   |     +--rw ietf
-   |     |  +--rw ietf-wg?   string
-   |     +--rw namespace                inet:uri
    |     +--rw submodule* [name revision]
    |     |  +--rw name        yang:yang-identifier
    |     |  +--rw revision    union
@@ -189,35 +190,35 @@ module: yang-catalog
    |           |  +--rw revision    union
    |           +--rw conformance-type?   enumeration
    +--rw vendors
-+--rw vendor* [name]
- +--rw name         string
- +--rw platforms
-+--rw platform* [name]
-   +--rw name                 string
-   +--rw software-versions
-+--rw software-version* [name]
- +--rw name                string
- +--rw software-flavors
-  +--rw software-flavor* [name]
-     +--rw name         string
-     +--rw protocols
-     |  +--rw protocol* [name]
-     |     +--rw name                identityref
-     |     +--rw protocol-version?   string
-     |     +--rw capabilities*       string
-     +--rw modules
-        +--rw module* [name revision organization]
-           +--rw name                -> /catalog/modules/module/name
-           +--rw revision            -> /catalog/modules/module/revision
-           +--rw organization        -> /catalog/modules/module/organization
-           +--rw os-version?         string
-           +--rw feature-set?        string
-           +--rw os-type?            string
-           +--rw feature*            yang:yang-identifier
-           +--rw deviation* [name revision]
-           |  +--rw name        yang:yang-identifier
-           |  +--rw revision    union
-           +--rw conformance-type?   enumeration
+      +--rw vendor* [name]
+         +--rw name         string
+         +--rw platforms
+            +--rw platform* [name]
+               +--rw name                 string
+               +--rw software-versions
+                  +--rw software-version* [name]
+                     +--rw name                string
+                     +--rw software-flavors
+                        +--rw software-flavor* [name]
+                           +--rw name         string
+                           +--rw protocols
+                           |  +--rw protocol* [name]
+                           |     +--rw name                identityref
+                           |     +--rw protocol-version?   string
+                           |     +--rw capabilities*       string
+                           +--rw modules
+                              +--rw module* [name revision organization]
+                                 +--rw name                -> /catalog/modules/module/name
+                                 +--rw revision            -> /catalog/modules/module/revision
+                                 +--rw organization        -> /catalog/modules/module/organization
+                                 +--rw os-version?         string
+                                 +--rw feature-set?        string
+                                 +--rw os-type?            string
+                                 +--rw feature*            yang:yang-identifier
+                                 +--rw deviation* [name revision]
+                                 |  +--rw name        yang:yang-identifier
+                                 |  +--rw revision    union
+                                 +--rw conformance-type?   enumeration
 </artwork>
     </figure>
     <t>
