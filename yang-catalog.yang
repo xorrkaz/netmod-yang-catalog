@@ -455,11 +455,11 @@ module yang-catalog {
         }
         enum "unclassified" {
           description
-            "This module does not have a data element tree, or it does not belong to any category.";
+            "This module does not belong to any category or can't be determined.";
         }
         enum "not-applicable" {
           description
-            "This module is submodule.";
+            "This module is not applicable. For example, because the YANG module only contains typedefs, groupings, or is a submodule";
         }
       }
       description
