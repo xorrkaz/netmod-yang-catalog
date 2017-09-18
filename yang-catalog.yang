@@ -16,7 +16,7 @@ module yang-catalog {
     "yangcatalog.org";
   contact
     "Benoit Claise <bclaise@cisco.com>
-
+     
      Joe Clarke <jclarke@cisco.com>";
   description
     "This module contains metadata pertinent to each YANG module, as
@@ -35,16 +35,16 @@ module yang-catalog {
   revision 2017-07-28 {
     description
       "* Revert config false nodes as we need to be able to set these via <edit-config>
-
+       
        * Make conformance-type optional as not all vendors implement yang-library
-
+       
        * Re-add the path typedef";
     reference "YANG Catalog <https://yangcatalog.org>";
   }
   revision 2017-07-26 {
     description
       "A number of improvements based on YANG Doctor review:
-
+       
        * Remove references to 'server' in leafs describing YANG data
        * Fold the augmentation module leafs directly under /catalog/modules/module
        * Use identities for protocols instead of an emumeration
@@ -73,6 +73,7 @@ module yang-catalog {
   /*
    * Identities
    */
+
   identity protocol {
     description
       "Abstract base identity for a YANG-based protocol.";
@@ -93,6 +94,7 @@ module yang-catalog {
   /*
    * Typedefs
    */
+
   typedef email-address {
     type string {
       pattern "[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+([.][a-zA-Z0-9-]+)*";
