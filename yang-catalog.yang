@@ -154,6 +154,20 @@ module yang-catalog {
           uses yang-lib-common-leafs;
           uses yang-lib-schema-leaf;
         }
+        list dependencies {
+          key "name";
+          description
+            "Each entry represents one dependency.";
+          uses yang-lib-common-leafs;
+          uses yang-lib-schema-leaf;
+        }
+        list dependants {
+          key "name";
+          description
+            "Each entry represents one dependant.";
+          uses yang-lib-common-leafs;
+          uses yang-lib-schema-leaf;
+        }
         container implementations {
           description
             "Container holding lists of per-module implementation details.";
