@@ -378,7 +378,7 @@ module yang-catalog {
          there are still some errors/warnings.";
     }
     leaf compilation-result {
-      type string;
+      type inet:uri;
       description
         "Result of the compilation explaining specifically what error or warning occurred.
          This is not existing if compilation status is PASSED.";
