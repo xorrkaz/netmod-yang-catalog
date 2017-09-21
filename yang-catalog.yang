@@ -380,8 +380,8 @@ module yang-catalog {
     leaf compilation-result {
       type inet:uri;
       description
-        "Result of the compilation explaining specifically what error or warning occurred.
-         This is not existing if compilation status is PASSED.";
+        "Link to the result of the compilation explaining specifically what error or
+         warning occurred.  This is not existing if compilation status is PASSED.";
     }
     leaf prefix {
       type string;
