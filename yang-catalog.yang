@@ -26,6 +26,14 @@ module yang-catalog {
      as well as obtain a list of available modules for a given
      vendor's platform and specific software release.";
 
+  revision 2017-09-26 {
+    description
+      "* Add leafs for tracking dependencies and dependents
+       * Simply the generated-from enumerated values
+       * Refine the type for compilation-result to be an inet:uri";
+    reference "YANG Catalog <https://yangcatalog.org>";
+  }
+
   revision 2017-08-18 {
     description
       "* Reorder organization to be with the other module keys
