@@ -16,7 +16,7 @@ module yang-catalog {
     "yangcatalog.org";
   contact
     "Benoit Claise <bclaise@cisco.com>
-
+     
      Joe Clarke <jclarke@cisco.com>";
   description
     "This module contains metadata pertinent to each YANG module, as
@@ -33,7 +33,6 @@ module yang-catalog {
        * Refine the type for compilation-result to be an inet:uri";
     reference "YANG Catalog <https://yangcatalog.org>";
   }
-
   revision 2017-08-18 {
     description
       "* Reorder organization to be with the other module keys
@@ -43,16 +42,16 @@ module yang-catalog {
   revision 2017-07-28 {
     description
       "* Revert config false nodes as we need to be able to set these via <edit-config>
-
+       
        * Make conformance-type optional as not all vendors implement yang-library
-
+       
        * Re-add the path typedef";
     reference "YANG Catalog <https://yangcatalog.org>";
   }
   revision 2017-07-26 {
     description
       "A number of improvements based on YANG Doctor review:
-
+       
        * Remove references to 'server' in leafs describing YANG data
        * Fold the augmentation module leafs directly under /catalog/modules/module
        * Use identities for protocols instead of an emumeration
@@ -286,7 +285,7 @@ module yang-catalog {
                            are expected to be added to address other YANG-based protocols.";
                         leaf name {
                           type identityref {
-                            base protocol;
+                            base yc:protocol;
                           }
                           description
                             "Identity of the YANG-based protocol that is supported.";
@@ -761,7 +760,7 @@ module yang-catalog {
         "The name of the repository.";
     }
     leaf path {
-      type path;
+      type yc:path;
       mandatory true;
       description
         "Location within the repository of the module file.";
