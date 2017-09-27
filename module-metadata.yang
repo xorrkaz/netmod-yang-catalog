@@ -19,21 +19,18 @@ module module-metadata {
       "* Fold in the GitHub repository leafs here as they are not required
          for the catalog.
        * Update the name of the shared-module-leafs grouping";
-    reference
-      "YANG Catalog <https://yangcatalog.org>";
+    reference "YANG Catalog <https://yangcatalog.org>";
   }
   revision 2017-07-15 {
     description
       "Remove conformance data as this can only be determined with an
        implementation.";
-     reference
-       "YANG Catalog <https://yangcatalog.org>";
+    reference "YANG Catalog <https://yangcatalog.org>";
   }
   revision 2017-07-07 {
     description
       "Initial revision.";
-    reference
-      "YANG Catalog <https://yangcatalog.org>";
+    reference "YANG Catalog <https://yangcatalog.org>";
   }
 
   container modules {
