@@ -22,7 +22,7 @@ module platform-implementation-metadata {
   revision 2017-07-27 {
     description
       "* Add implementation leafs from YANG Library
-       
+
        * Add a type leaf to the module-list-file in order to support
          capabilities and YANG Library files";
     reference "YANG Catalog <https://yangcatalog.org>";
@@ -33,11 +33,11 @@ module platform-implementation-metadata {
     reference "YANG Catalog <https://yangcatalog.org>";
   }
 
-  container platform {
-    list platforms {
+  container platforms {
+    list platform {
       key "vendor name software-version software-flavor";
       description
-        "";
+        "The list of platforms that implement YANG modules.";
       leaf vendor {
         type string;
         description
@@ -95,7 +95,7 @@ module platform-implementation-metadata {
       }
     }
     description
-      "The platform container is a top-level node that contains the list of
+      "The platforms container is a top-level node that contains the list of
        relevant platforms.";
   }
 }
