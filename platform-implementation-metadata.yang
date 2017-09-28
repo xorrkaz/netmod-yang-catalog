@@ -20,7 +20,10 @@ module platform-implementation-metadata {
 
   revision 2017-09-27 {
     description
-      "Move platforms under a top-level platform container.";
+      "* Move platforms under a top-level platform container
+
+       * Add a netconf-capabilities leaf-list to track possibly
+         non-extractable platform capabilities.";
     reference "YANG Catalog <https://yangcatalog.org>";
   }
   revision 2017-07-27 {
