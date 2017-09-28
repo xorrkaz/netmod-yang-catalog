@@ -48,6 +48,12 @@ module platform-implementation-metadata {
         description
           "Platform on which this module is implemented.";
       }
+      leaf-list netconf-capabilities {
+        type string;
+        description
+          "Listed name of capabilities that are supported by the specific device,
+           and protocol versions.";
+      }
       leaf-list product-ids {
         type string;
         description
