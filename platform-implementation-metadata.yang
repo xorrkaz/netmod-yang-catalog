@@ -6,6 +6,10 @@ module platform-implementation-metadata {
     prefix yc;
   }
 
+  import ietf-inet-types {
+      prefix inet;
+  }
+
   organization
     "yangcatalog.org";
   contact
@@ -49,7 +53,7 @@ module platform-implementation-metadata {
           "Platform on which this module is implemented.";
       }
       leaf-list netconf-capabilities {
-        type string;
+        type inet:uri;
         description
           "Listed name of capabilities that are supported by the specific device,
            and protocol versions.";
