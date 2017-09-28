@@ -22,7 +22,7 @@ module platform-implementation-metadata {
   revision 2017-07-27 {
     description
       "* Add implementation leafs from YANG Library
-
+       
        * Add a type leaf to the module-list-file in order to support
          capabilities and YANG Library files";
     reference "YANG Catalog <https://yangcatalog.org>";
