@@ -290,7 +290,7 @@ module yang-catalog {
                           description
                             "Identity of the YANG-based protocol that is supported.";
                         }
-                        leaf protocol-version {
+                        leaf-list protocol-version {
                           type string;
                           description
                             "Version of the specific protocol.";

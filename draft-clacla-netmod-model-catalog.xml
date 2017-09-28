@@ -215,7 +215,7 @@ similar to "schema" from <xref target="RFC7895"/>). And this adds to the overall
                                  +--rw protocols
                                  |  +--rw protocol* [name]
                                  |     +--rw name                identityref
-                                 |     +--rw protocol-version?   string
+                                 |     +--rw protocol-version*   string
                                  |     +--rw capabilities*       string
                                  +--rw modules
                                     +--rw module*
@@ -524,7 +524,7 @@ description
                           +--rw protocols
                           |  +--rw protocol* [name]
                           |     +--rw name                identityref
-                          |     +--rw protocol-version?   string
+                          |     +--rw protocol-version*   string
                           |     +--rw capabilities*       string
                           +--rw modules
                              +--rw module*
@@ -888,7 +888,7 @@ The YANG Catalog module is currently targeted to address the following use cases
                             description
                               "Identity of the YANG-based protocol that is supported.";
                           }
-                          leaf protocol-version {
+                          leaf-list protocol-version {
                             type string;
                             description
                               "Version of the specific protocol.";
