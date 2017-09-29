@@ -72,21 +72,21 @@ operators to automate coherent services, the industry must ensure the following:
 <list style="numbers"><t>Data models must work together
  </t><t>There exists a toolchain to help one search and understand models
  </t><t>Metadata is present to further describe model attributes
- </t></list>
+ </t>
+</list>
 </t>
   <t>
-The site <eref target="yangcatalog.org"/> (and the YANG catalog that it provides) is an attempt to
-address these key tenants.  From a high level point of view, the goal of this catalog
-is to become a reference for all YANG modules available in the industry, for both
-YANG developers (to search on what exists already) and for operators (to discover
+The site <eref target="https://www.yangcatalog.org"/> (and the YANG catalog that it provides) 
+is an attempt to address these key tenants.  From a high level point of view, the goal of 
+this catalog is to become a reference for all YANG modules available in the industry, for 
+both YANG developers (to search on what exists already) and for operators (to discover
 the more mature YANG models to automate services). This YANG catalog should not only
 contain pointers to the YANG modules themselves, but also contain metadata related
 to those YANG modules: What is the module type (service model or not?); what is the
 maturity level? (e.g., for the IETF: is this an RFC, a working group document or an
 individual draft?); is this module implemented?; who is the contact?; is there open-source
 code available? And we expect many more in the future. The industry has begun to understand that the
-metadata related to YANG models become equally important as the YANG models
-themselves.
+metadata related to YANG models become equally important as the YANG models themselves.
 </t>
   <t>
 This document defines a YANG <xref target="RFC6020"/> module called yang-catalog.yang
@@ -100,17 +100,15 @@ regular basis.
   The yangcatalog.org instantiation of the catalog provides a means for module authors and
   vendors implementing modules to upload their metadata, which is then searchable via an API,
   as well as using a variety of web-based tools.  The instructions for contributing and searching
-  for metadata can be found at <eref target="yangcatalog.org/contributing.php"/>.
+  for metadata can be found at <eref target="https://www.yangcatalog.org/contribe.php"/>.
 </t>
   <section anchor="open_issues" title="Status of Work and Open Issues">
     <t>
 The top open issues are:
   <list style="numbers">
-    <t>Obtain feedback from vendors and SDOs
-    </t><t>Socialize module at the IETF and incorporate feedback
-  </t><t>Provide module bundle support
-</t>
-  <t>Incorporate semantic versioning metadata</t>
+    <t>Obtain feedback from vendors and SDOs</t>
+    <t>Socialize module at the IETF and incorporate feedback</t>
+    <t>Provide module bundle support</t>
 </list>
 </t>
   </section>
@@ -122,8 +120,8 @@ The top open issues are:
  as a starting point but we quickly realized that the objectives are different.
  As a consequence, even if some of the information is similar, this YANG module
  started to diverge.
- Below are our observations and the justifications for the divergence.
-</t>
+ Below are the justifications for the divergence, our observations, and our learning 
+ experience as we have been developing and getting feedback.</t>
   <section anchor="yang_library" title="YANG Module Library">
     <t>
 In order for the YANG catalog to become a complete inventory of which models
@@ -147,92 +145,90 @@ similar to "schema" from <xref target="RFC7895"/>). And this adds to the overall
 </t>
     <figure>
 <artwork>
-  module: yang-catalog
-      +--rw catalog
-         +--rw modules
-         |  +--rw module* [name revision organization]
-         |     +--rw name                     yang:yang-identifier
-         |     +--rw revision                 union
-         |     +--rw organization             string
-         |     +--rw ietf
-         |     |  +--rw ietf-wg?   string
-         |     +--rw namespace                inet:uri
-         |     +--rw schema?                  inet:uri
-         |     +--rw generated-from?          enumeration
-         |     +--rw maturity-level?          enumeration
-         |     +--rw document-name?           string
-         |     +--rw author-email?            yc:email-address
-         |     +--rw reference?               inet:uri
-         |     +--rw module-classification    enumeration
-         |     +--rw compilation-status?      enumeration
-         |     +--rw compilation-result?      inet:uri
-         |     +--rw prefix?                  string
-         |     +--rw yang-version?            enumeration
-         |     +--rw description?             string
-         |     +--rw contact?                 string
-         |     +--rw module-type?             enumeration
-         |     +--rw belongs-to?              yang:yang-identifier
-         |     +--rw tree-type?               enumeration
-         |     +--rw submodule* [name revision]
-         |     |  +--rw name        yang:yang-identifier
-         |     |  +--rw revision    union
-         |     |  +--rw schema?     inet:uri
-         |     +--rw dependencies* [name]
-         |     |  +--rw name        yang:yang-identifier
-         |     |  +--rw revision?   union
-         |     |  +--rw schema?     inet:uri
-         |     +--rw dependents* [name]
-         |     |  +--rw name        yang:yang-identifier
-         |     |  +--rw revision?   union
-         |     |  +--rw schema?     inet:uri
-         |     +--rw implementations
-         |        +--rw implementation*
-         |                [vendor platform software-version software-flavor]
-         |           +--rw vendor              string
-         |           +--rw platform            string
-         |           +--rw software-version    string
-         |           +--rw software-flavor     string
-         |           +--rw os-version?         string
-         |           +--rw feature-set?        string
-         |           +--rw os-type?            string
-         |           +--rw feature*            yang:yang-identifier
-         |           +--rw deviation* [name revision]
-         |           |  +--rw name        yang:yang-identifier
-         |           |  +--rw revision    union
-         |           +--rw conformance-type?   enumeration
-         +--rw vendors
-            +--rw vendor* [name]
-               +--rw name         string
-               +--rw platforms
-                  +--rw platform* [name]
-                     +--rw name                 string
-                     +--rw software-versions
-                        +--rw software-version* [name]
-                           +--rw name                string
-                           +--rw software-flavors
-                              +--rw software-flavor* [name]
-                                 +--rw name         string
-                                 +--rw protocols
-                                 |  +--rw protocol* [name]
-                                 |     +--rw name                identityref
-                                 |     +--rw protocol-version*   string
-                                 |     +--rw capabilities*       string
-                                 +--rw modules
-                                    +--rw module*
-                                            [name revision organization]
-                                       +--rw name                leafref
-                                       +--rw revision            leafref
-                                       +--rw organization        leafref
-                                       +--rw os-version?         string
-                                       +--rw feature-set?        string
-                                       +--rw os-type?            string
-                                       +--rw feature*
-                                       |       yang:yang-identifier
-                                       +--rw deviation* [name revision]
-                                       |  +--rw name
-                                       |  |       yang:yang-identifier
-                                       |  +--rw revision    union
-                                       +--rw conformance-type?   enumeration
+module: yang-catalog
+    +--rw catalog
+       +--rw modules
+       |  +--rw module* [name revision organization]
+       |     +--rw name                        yang:yang-identifier
+       |     +--rw revision                    union
+       |     +--rw organization                string
+       |     +--rw ietf
+       |     |  +--rw ietf-wg?   string
+       |     +--rw namespace                   inet:uri
+       |     +--rw schema?                     inet:uri
+       |     +--rw generated-from?             enumeration
+       |     +--rw maturity-level?             enumeration
+       |     +--rw document-name?              string
+       |     +--rw author-email?               yc:email-address
+       |     +--rw reference?                  inet:uri
+       |     +--rw module-classification       enumeration
+       |     +--rw compilation-status?         enumeration
+       |     +--rw compilation-result?         inet:uri
+       |     +--rw prefix?                     string
+       |     +--rw yang-version?               enumeration
+       |     +--rw description?                string
+       |     +--rw contact?                    string
+       |     +--rw module-type?                enumeration
+       |     +--rw belongs-to?                 yang:yang-identifier
+       |     +--rw tree-type?                  enumeration
+       |     +--rw submodule* [name revision]
+       |     |  +--rw name        yang:yang-identifier
+       |     |  +--rw revision    union
+       |     |  +--rw schema?     inet:uri
+       |     +--rw dependencies* [name]
+       |     |  +--rw name        yang:yang-identifier
+       |     |  +--rw revision?   union
+       |     |  +--rw schema?     inet:uri
+       |     +--rw dependents* [name]
+       |     |  +--rw name        yang:yang-identifier
+       |     |  +--rw revision?   union
+       |     |  +--rw schema?     inet:uri
+       |     +--rw semantic-version?           yc:semver
+       |     +--rw derived-semantic-version?   yc:semver
+       |     +--rw implementations
+       |        +--rw implementation* [vendor platform software-version software-flavor]
+       |           +--rw vendor              string
+       |           +--rw platform            string
+       |           +--rw software-version    string
+       |           +--rw software-flavor     string
+       |           +--rw os-version?         string
+       |           +--rw feature-set?        string
+       |           +--rw os-type?            string
+       |           +--rw feature*            yang:yang-identifier
+       |           +--rw deviation* [name revision]
+       |           |  +--rw name        yang:yang-identifier
+       |           |  +--rw revision    union
+       |           +--rw conformance-type?   enumeration
+       +--rw vendors
+          +--rw vendor* [name]
+             +--rw name         string
+             +--rw platforms
+                +--rw platform* [name]
+                   +--rw name                 string
+                   +--rw software-versions
+                      +--rw software-version* [name]
+                         +--rw name                string
+                         +--rw software-flavors
+                            +--rw software-flavor* [name]
+                               +--rw name         string
+                               +--rw protocols
+                               |  +--rw protocol* [name]
+                               |     +--rw name                identityref
+                               |     +--rw protocol-version*   string
+                               |     +--rw capabilities*       string
+                               +--rw modules
+                                  +--rw module* [name revision organization]
+                                     +--rw name                -> /catalog/modules/module/name
+                                     +--rw revision            -> /catalog/modules/module/revision
+                                     +--rw organization        -> /catalog/modules/module/organization
+                                     +--rw os-version?         string
+                                     +--rw feature-set?        string
+                                     +--rw os-type?            string
+                                     +--rw feature*            yang:yang-identifier
+                                     +--rw deviation* [name revision]
+                                     |  +--rw name        yang:yang-identifier
+                                     |  +--rw revision    union
+                                     +--rw conformance-type?   enumeration
 </artwork>
     </figure>
     <t>
@@ -324,9 +320,10 @@ faulty YANG constructs, because of a faulty imported YANG module, or simply beca
 of warnings). The results of compilation testing are denoted in the "compilation-status"
 leaf with links to the output of the tests stored in the "compilation-result" leaf.
 Note that some warnings seen in "compilation-result" are not always show-stoppers from
-a code generation point of view. Nonetheless, the compilation or validation status,
-along with the compilation output, provide a clear indication of a given YANG module's
-development phase and stability.
+a code generation point of view (see the Generated From section). Nonetheless, the compilation 
+or validation status, along with the compilation output, provide a clear indication of a given 
+YANG module's development phase and stability. The current set of validator is pyang, confdc, 
+yangdump-pro, and yanglint.
 </t>
   <figure>
     <artwork>
@@ -371,7 +368,7 @@ description
     </artwork>
   </figure>
   <t>
-    The current instantiation of the YANG Catalog at <eref target="https://yangcatalog.org"/>
+    The current instantiation of the YANG Catalog at <eref target="https://www.yangcatalog.org"/>
     uses a number of different YANG compilers for testing.  The wrapper that handles validation
     attempts to use metadata from the catalog to determine which tests to perform on a given
     module.  For example, if the module is authored by the IETF, IETF-specific tests will be
@@ -567,14 +564,14 @@ The YANG Catalog module is currently targeted to address the following use cases
 </t>
   <section anchor="yang_search" title="YANG Search Metadata">
     <t>
-  The yangcatalog.org toolchain provides a service for <eref target="https://yangcatalog.org/yang-search">
+  The yangcatalog.org toolchain provides a service for <eref target="https://www.yangcatalog.org/yang-search">
   searching</eref> for YANG modules based on keywords.  The resulting search data currently stores
   the module and node metadata in a proprietary format along with the search index data.  By populating
   the yang-catalog module, this search service can instead pull the metadata from the implementation
   of the module.  Populating this instance of the yang-catalog module will be using an API that is still
   under development, but will ultimately allow SDOs and vendors to provide metadata and ensure the search
   service has the most up-to-date data for all available modules.
-</t>
+    </t>
   </section>
   <section anchor="yang_support" title="Identify YANG Module Support in Devices">
     <t>
@@ -583,8 +580,96 @@ The YANG Catalog module is currently targeted to address the following use cases
   a straight-forward way for one to understand the extent of YANG module support in participating vendors'
   software releases.  Eventually a web-based graphical interface will be connected to this on yangcatalog.org
   to make it easier for consumers to leverage the instance of the yang-catalog module for this use case.
-</t>
+    </t>
   </section>
+  <section anchor="yang_backward_compatibility" title="Identify The Backward Compatibility between YANG Module Revisions">
+   <t>
+   The YANG catalog contains non only the most up to date YANG
+   module revision, but keeps all existing revisions. With APIs in mind,
+   it's important to understand whether different YANG module revisions
+   are backward compatible (this is specifically imported for native YANG modules,
+   i.e. the ones where generated-from = native).
+   This document uses the following semver.org semantic <xref target="semver"/>
+   to compare the YANG module backwards (in)compatibility:
+   </t>
+   <t>
+     <list style="symbol">
+       <t>MAJOR is incremented when the new version of the specification is
+           incompatible with previous versions.</t>
+       <t>MINOR is incremented when new functionality is added in a manner
+            that is backward-compatible with previous versions.</t>
+       <t>PATCH is incremented
+            when bug fixes are made in a backward- compatible manner.</t>
+     </list>
+   </t>
+   <t>
+     Two distinct leaves in the YANG module contains this semver semantic:
+   </t>
+   <t>
+     <list style="symbol">
+       <t>the semantic-version leaf contains the value reported as metadata by a
+           specific YANG module.
+       </t>
+       <t>the derived-semantic-version leaf is established by examining the
+          the YANG module themselves.  As such, only the YANG syntax,
+          as opposed to the implementation changes that lead some
+          some semantic changes.
+       </t>
+   </list>
+   </t>
+   <t>Typically, an openconfig YANG module would contain an extension, which
+   is mapped to the semantic-version leaf.
+   </t>
+
+   <figure>
+   <artwork>
+   // extension statements
+   extension openconfig-version {
+     argument "semver" {
+       yin-element false;
+     }
+     description
+       "The OpenConfig version number for the module. This is
+       expressed as a semantic version number of the form:
+         x.y.z
+        where:
+         * x corresponds to the major version,
+         * y corresponds to a minor version,
+         * z corresponds to a patch version.
+       This version corresponds to the model file within which it is
+       defined, and does not cover the whole set of OpenConfig models.
+       Where several modules are used to build up a single block of
+       functionality, the same module version is specified across each
+       file that makes up the module.
+ 
+       A major version number of 0 indicates that this model is still
+       in development (whether within OpenConfig or with industry
+       partners), and is potentially subject to change.
+ 
+       Following a release of major version 1, all modules will
+       increment major revision number where backwards incompatible
+       changes to the model are made.
+ 
+       The minor version is changed when features are added to the
+       model that do not impact current clients use of the model.
+ 
+       The patch-level version is incremented when non-feature changes
+       (such as bugfixes or clarifications to human-readable
+       descriptions that do not impact model functionality) are made
+       that maintain backwards compatibility.
+ 
+       The version number is stored in the module meta-data.";
+   }
+   </artwork>
+   </figure>
+   <t>
+     Note that the absolute numbers in the semantic-version and
+     derived-semantic-version are actually meaning less: the difference
+     between two YANG module semver fields should be looked at.
+    </t>
+  </section>
+
+
 </section>
 <section anchor="yang_module" title="YANG Catalog YANG module">
   <t>
@@ -1410,14 +1495,21 @@ No IANA action is requested.
 <?rfc needLines="20"?>
 <back>
 <references title="Normative References">
-&RFC6020;
-&RFC7895;
-&RFC7950;
+   <?rfc include='reference.RFC.6020'?>
+   <?rfc include='reference.RFC.7895'?>
+   <?rfc include='reference.RFC.7950'?>
+   <?rfc include='reference.RFC.8199'?>
+   <reference anchor="semver" target="https://www.semver.org">
+      <front>
+        <title>Semantic Versioning 2.0.0</title>
+        <author/>
+        <date/>
+      </front>
+   </reference>
 </references>
 <references title="Informative References">
-&OPENCONFIG-YANG-CATALOG;
-&NETMOD-REVISED-DATASTORES;
-&NETMOD-YANG-MODEL-CLASSIFICATION;
+   <?rfc include='reference.I-D.openconfig-netmod-model-catalog'?>
+   <?rfc include='reference.I-D.ietf-netmod-revised-datastores'?>
 </references>
 <?rfc needLines="100"?>
 <section title="Acknowledgments">
@@ -1438,7 +1530,7 @@ No IANA action is requested.
     <t>Modularize some leafs and create typedefs to share with API YANG modules.</t>
     <t>Add module conformance-type, deviation and feature leafs under the implementation branch.</t>
     <t>Change yang-version to be an enum.</t>
-    <t>Add a leaf for module-classification based on <xref target="I-D.ietf-netmod-yang-model-classification"/>.</t>
+    <t>Add a leaf for module-classification based on <xref target="RFC8199"/>.</t>
     <t>Normalize enums to be lowercase.</t>
     <t>Use identities for protocols instead of an enumeration.</t>
     <t>Make conformance-type optional as not all vendors implement <xref target="RFC7895"/>.</t>
