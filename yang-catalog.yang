@@ -29,7 +29,7 @@ module yang-catalog {
   revision 2017-09-26 {
     description
       "* Add leafs for tracking dependencies and dependents
-       * Simply the generated-from enumerated values
+       * Simplify the generated-from enumerated values
        * Refine the type for compilation-result to be an inet:uri
        * Add leafs for semantic versioning";
     reference "YANG Catalog <https://yangcatalog.org>";
