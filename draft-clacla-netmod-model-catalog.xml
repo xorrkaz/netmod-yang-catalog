@@ -76,9 +76,9 @@ operators to automate coherent services, the industry must ensure the following:
 </list>
 </t>
   <t>
-The site <eref target="https://www.yangcatalog.org"/> (and the YANG catalog that it provides) 
-is an attempt to address these key tenants.  From a high level point of view, the goal of 
-this catalog is to become a reference for all YANG modules available in the industry, for 
+The site <eref target="https://www.yangcatalog.org"/> (and the YANG catalog that it provides)
+is an attempt to address these key tenants.  From a high level point of view, the goal of
+this catalog is to become a reference for all YANG modules available in the industry, for
 both YANG developers (to search on what exists already) and for operators (to discover
 the more mature YANG models to automate services). This YANG catalog should not only
 contain pointers to the YANG modules themselves, but also contain metadata related
@@ -120,7 +120,7 @@ The top open issues are:
  as a starting point but we quickly realized that the objectives are different.
  As a consequence, even if some of the information is similar, this YANG module
  started to diverge.
- Below are the justifications for the divergence, our observations, and our learning 
+ Below are the justifications for the divergence, our observations, and our learning
  experience as we have been developing and getting feedback.</t>
   <section anchor="yang_library" title="YANG Module Library">
     <t>
@@ -320,9 +320,9 @@ faulty YANG constructs, because of a faulty imported YANG module, or simply beca
 of warnings). The results of compilation testing are denoted in the "compilation-status"
 leaf with links to the output of the tests stored in the "compilation-result" leaf.
 Note that some warnings seen in "compilation-result" are not always show-stoppers from
-a code generation point of view (see the Generated From section). Nonetheless, the compilation 
-or validation status, along with the compilation output, provide a clear indication of a given 
-YANG module's development phase and stability. The current set of validator is pyang, confdc, 
+a code generation point of view (see the Generated From section). Nonetheless, the compilation
+or validation status, along with the compilation output, provide a clear indication of a given
+YANG module's development phase and stability. The current set of validator is pyang, confdc,
 yangdump-pro, and yanglint.
 </t>
   <figure>
@@ -584,8 +584,8 @@ The YANG Catalog module is currently targeted to address the following use cases
   </section>
   <section anchor="yang_backward_compatibility" title="Identify The Backward Compatibility between YANG Module Revisions">
    <t>
-   The YANG catalog contains non only the most up to date YANG
-   module revision, but keeps all existing revisions. With APIs in mind,
+   The YANG catalog contains not only the most up-to-date YANG
+   module revision of a given module, but keeps all previous revisions as well. With APIs in mind,
    it's important to understand whether different YANG module revisions
    are backward compatible (this is specifically imported for native YANG modules,
    i.e. the ones where generated-from = native).
@@ -599,7 +599,7 @@ The YANG Catalog module is currently targeted to address the following use cases
        <t>MINOR is incremented when new functionality is added in a manner
             that is backward-compatible with previous versions.</t>
        <t>PATCH is incremented
-            when bug fixes are made in a backward- compatible manner.</t>
+            when bug fixes are made in a backward-compatible manner.</t>
      </list>
    </t>
    <t>
@@ -617,7 +617,7 @@ The YANG Catalog module is currently targeted to address the following use cases
        </t>
    </list>
    </t>
-   <t>Typically, an openconfig YANG module would contain an extension, which
+   <t>Typically, an Openconfig YANG module would contain an extension, which
    is mapped to the semantic-version leaf.
    </t>
 
@@ -641,30 +641,30 @@ The YANG Catalog module is currently targeted to address the following use cases
        Where several modules are used to build up a single block of
        functionality, the same module version is specified across each
        file that makes up the module.
- 
+
        A major version number of 0 indicates that this model is still
        in development (whether within OpenConfig or with industry
        partners), and is potentially subject to change.
- 
+
        Following a release of major version 1, all modules will
        increment major revision number where backwards incompatible
        changes to the model are made.
- 
+
        The minor version is changed when features are added to the
        model that do not impact current clients use of the model.
- 
+
        The patch-level version is incremented when non-feature changes
        (such as bugfixes or clarifications to human-readable
        descriptions that do not impact model functionality) are made
        that maintain backwards compatibility.
- 
+
        The version number is stored in the module meta-data.";
    }
    </artwork>
    </figure>
    <t>
      Note that the absolute numbers in the semantic-version and
-     derived-semantic-version are actually meaning less: the difference
+     derived-semantic-version are actually meaningless: the difference
      between two YANG module semver fields should be looked at.
     </t>
   </section>
@@ -712,10 +712,10 @@ The YANG Catalog module is currently targeted to address the following use cases
       description
         "* Add leafs for tracking dependencies and dependents
          * Simply the generated-from enumerated values
-         * Refine the type for compilation-result to be an inet:uri";
+         * Refine the type for compilation-result to be an inet:uri
+         * Add leafs for semantic versioning";
       reference "YANG Catalog <https://yangcatalog.org>";
     }
-
     revision 2017-08-18 {
       description
         "* Reorder organization to be with the other module keys
@@ -801,6 +801,29 @@ The YANG Catalog module is currently targeted to address the following use cases
         "This type represents a string with path to the file.";
     }
 
+    typedef semver {
+      type string {
+        pattern "[0-9]+\\.[0-9]+\\.[0-9]+";
+      }
+      description
+        "A semantic version in the format of x.y.z, where:
+
+         x = the major version number
+         y = the minor version number
+         z = the patch version number
+
+         Changes to the major version number denote backwards-incompatible
+         changes between two revisions of the same module.
+
+         Changes to the minor version number indicate there have been new
+         backwards-compatible features introduced in the later version of
+         a module.
+
+         Changes to the patch version indicate bug fixes between two
+         versions of a module.";
+      reference "Semantic Versioning 2.0.0 <http://semver.org/>";
+    }
+
     container catalog {
       description
         "Root container of yang-catalog holding two main branches -
@@ -857,6 +880,21 @@ The YANG Catalog module is currently targeted to address the following use cases
               "Each entry represents one dependent.";
             uses yang-lib-common-leafs;
             uses yang-lib-schema-leaf;
+          }
+          leaf semantic-version {
+            type yc:semver;
+            description
+              "The formal semantic version of a module as provided by the module
+               itself.  If the module does not provide a semantic version, this leaf
+               will not be specified.";
+          }
+          leaf derived-semantic-version {
+            type yc:semver;
+            description
+              "The semantic version of a module as compared to other revisions of
+               the same module.  This value is computed algorithmically by ordering
+               all revisions of a given module and comparing them to look for backwards
+               incompatible changes.";
           }
           container implementations {
             description
@@ -968,7 +1006,7 @@ The YANG Catalog module is currently targeted to address the following use cases
                              are expected to be added to address other YANG-based protocols.";
                           leaf name {
                             type identityref {
-                              base protocol;
+                              base yc:protocol;
                             }
                             description
                               "Identity of the YANG-based protocol that is supported.";
@@ -1443,7 +1481,7 @@ The YANG Catalog module is currently targeted to address the following use cases
           "The name of the repository.";
       }
       leaf path {
-        type path;
+        type yc:path;
         mandatory true;
         description
           "Location within the repository of the module file.";
@@ -1537,6 +1575,18 @@ No IANA action is requested.
     <t>Add a leaf for tree-type based on <xref target="I-D.ietf-netmod-revised-datastores"/>.</t>
     <t>Add a reference to contributing to the YANG Catalog at yangcatalog.org.</t>
     <t>Various wording and style changes to the document text.</t>
+  </list></t>
+
+  <t>Draft -01 to -02:</t>
+
+  <t><list style="symbols">
+    <t>Add a belongs-to leaf to track parent modules.</t>
+    <t>Add leafs to track dependents and dependencies for a given module.</t>
+    <t>Simplify the generated-from enumerated values.</t>
+    <t>Refine the type for compilation-result to be an inet:uri.</t>
+    <t>Add leafs for semantic versioning.</t>
+    <t>Reorder the organization leaf to be with other module keys.</t>
+    <t>Add text to describe generated-from and semantic versioning.</t>
   </list></t>
 </section>
 </back>
