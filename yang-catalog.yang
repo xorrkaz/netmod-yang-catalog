@@ -16,7 +16,7 @@ module yang-catalog {
     "yangcatalog.org";
   contact
     "Benoit Claise <bclaise@cisco.com>
-     
+
      Joe Clarke <jclarke@cisco.com>";
   description
     "This module contains metadata pertinent to each YANG module, as
@@ -30,7 +30,8 @@ module yang-catalog {
     description
       "* Add leafs for tracking dependencies and dependents
        * Simply the generated-from enumerated values
-       * Refine the type for compilation-result to be an inet:uri";
+       * Refine the type for compilation-result to be an inet:uri
+       * Add leafs for semantic versioning";
     reference "YANG Catalog <https://yangcatalog.org>";
   }
   revision 2017-08-18 {
@@ -42,16 +43,16 @@ module yang-catalog {
   revision 2017-07-28 {
     description
       "* Revert config false nodes as we need to be able to set these via <edit-config>
-       
+
        * Make conformance-type optional as not all vendors implement yang-library
-       
+
        * Re-add the path typedef";
     reference "YANG Catalog <https://yangcatalog.org>";
   }
   revision 2017-07-26 {
     description
       "A number of improvements based on YANG Doctor review:
-       
+
        * Remove references to 'server' in leafs describing YANG data
        * Fold the augmentation module leafs directly under /catalog/modules/module
        * Use identities for protocols instead of an emumeration
@@ -118,6 +119,29 @@ module yang-catalog {
       "This type represents a string with path to the file.";
   }
 
+  typedef semver {
+    type string {
+      pattern "[0-9]+\\.[0-9]+\\.[0-9]+";
+    }
+    description
+      "A semantic version in the format of x.y.z, where:
+
+       x = the major version number
+       y = the minor version number
+       z = the patch version number
+
+       Changes to the major version number denote backwards-incompatible
+       changes between two revisions of the same module.
+
+       Changes to the minor version number indicate there have been new
+       backwards-compatible features introduced in the later version of
+       a module.
+
+       Changes to the patch version indicate bug fixes between two
+       versions of a module.";
+    reference "Semantic Versioning 2.0.0 <http://semver.org/>";
+  }
+
   container catalog {
     description
       "Root container of yang-catalog holding two main branches -
@@ -174,6 +198,21 @@ module yang-catalog {
             "Each entry represents one dependent.";
           uses yang-lib-common-leafs;
           uses yang-lib-schema-leaf;
+        }
+        leaf semantic-version {
+          type yc:semver;
+          description
+            "The formal semantic version of a module as provided by the module
+             itself.  If the module does not provide a semantic version, this leaf
+             will not be specified.";
+        }
+        leaf derived-semantic-version {
+          type yc:semver;
+          description
+            "The semantic version of a module as compared to other revisions of
+             the same module.  This value is computed algorithmically by ordering
+             all revisions of a given module and comparing them to look for backwards
+             incompatible changes.";
         }
         container implementations {
           description
