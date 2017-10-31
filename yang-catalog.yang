@@ -16,7 +16,7 @@ module yang-catalog {
     "yangcatalog.org";
   contact
     "Benoit Claise <bclaise@cisco.com>
-
+     
      Joe Clarke <jclarke@cisco.com>";
   description
     "This module contains metadata pertinent to each YANG module, as
@@ -43,16 +43,16 @@ module yang-catalog {
   revision 2017-07-28 {
     description
       "* Revert config false nodes as we need to be able to set these via <edit-config>
-
+       
        * Make conformance-type optional as not all vendors implement yang-library
-
+       
        * Re-add the path typedef";
     reference "YANG Catalog <https://yangcatalog.org>";
   }
   revision 2017-07-26 {
     description
       "A number of improvements based on YANG Doctor review:
-
+       
        * Remove references to 'server' in leafs describing YANG data
        * Fold the augmentation module leafs directly under /catalog/modules/module
        * Use identities for protocols instead of an emumeration
@@ -78,10 +78,6 @@ module yang-catalog {
        YANG Catalog <https://yangcatalog.org>";
   }
 
-  /*
-   * Identities
-   */
-
   identity protocol {
     description
       "Abstract base identity for a YANG-based protocol.";
@@ -98,10 +94,6 @@ module yang-catalog {
     description
       "Protocol identity for RESTCONF as described in RFC 8040.";
   }
-
-  /*
-   * Typedefs
-   */
 
   typedef email-address {
     type string {
@@ -125,18 +117,18 @@ module yang-catalog {
     }
     description
       "A semantic version in the format of x.y.z, where:
-
+       
        x = the major version number
        y = the minor version number
        z = the patch version number
-
+       
        Changes to the major version number denote backwards-incompatible
        changes between two revisions of the same module.
-
+       
        Changes to the minor version number indicate there have been new
        backwards-compatible features introduced in the later version of
        a module.
-
+       
        Changes to the patch version indicate bug fixes between two
        versions of a module.";
     reference "Semantic Versioning 2.0.0 <http://semver.org/>";
@@ -248,7 +240,7 @@ module yang-catalog {
                  be a license, additional software component, or a feature set.";
             }
             uses shared-implementation-leafs;
-            uses yang-lib-imlementation-leafs;
+            uses yang-lib-implementation-leafs;
           }
         }
       }
@@ -376,7 +368,7 @@ module yang-catalog {
                               module.";
                         }
                         uses shared-implementation-leafs;
-                        uses yang-lib-imlementation-leafs;
+                        uses yang-lib-implementation-leafs;
                       }
                     }
                   }
@@ -529,6 +521,14 @@ module yang-catalog {
          Network Management Datastores Architecture.";
       reference "draft-dsdt-nmda-guidelines Guidelines for YANG Module Authors (NMDA)";
     }
+    leaf yang-tree {
+      when "../module-type = 'module'";
+      type inet:uri;
+      description
+        "This leaf provides a URI that points to the ASCII tree format of the module in
+         draft-ietf-netmod-yang-tree-diagrams format.";
+      reference "See draft-ietf-netmod-yang-tree-diagrams.";
+    }
     description
       "Grouping of YANG module metadata that extends the common list defined in the YANG
        Module Library (RFC 7895).";
@@ -596,7 +596,7 @@ module yang-catalog {
     reference "RFC7895 YANG Module Library : schema-leaf grouping";
   }
 
-  grouping yang-lib-imlementation-leafs {
+  grouping yang-lib-implementation-leafs {
     leaf-list feature {
       type yang:yang-identifier;
       description
@@ -646,9 +646,6 @@ module yang-catalog {
              the import statements.";
         }
       }
-      // Removing the mandatory true for now as not all vendors may have
-      // this information if they do not implement yang-library.
-      //mandatory true;
       description
         "Indicates the type of conformance the server is claiming
          for the YANG module identified by this entry.";
