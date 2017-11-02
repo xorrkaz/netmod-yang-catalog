@@ -537,6 +537,12 @@ module yang-catalog {
          draft-ietf-netmod-yang-tree-diagrams format.";
       reference "See draft-ietf-netmod-yang-tree-diagrams.";
     }
+    leaf expires {
+      type yang:date-and-time;
+      description
+        "Date and time of when this module expires (if it expires).  This will typically be used for
+         modules that have not been fully ratified.";
+    }
     description
       "Grouping of YANG module metadata that extends the common list defined in the YANG
        Module Library (RFC 7895).";
