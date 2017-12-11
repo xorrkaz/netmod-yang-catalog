@@ -543,6 +543,13 @@ module yang-catalog {
         "Date and time of when this module expires (if it expires).  This will typically be used for
          modules that have not been fully ratified.";
     }
+    leaf expired {
+      type boolean;
+      default "false";
+      description
+        "Whether or not this module has expired.  If the current date is beyond the expires date, then expired
+         should be true.";
+    }
     description
       "Grouping of YANG module metadata that extends the common list defined in the YANG
        Module Library (RFC 7895).";
