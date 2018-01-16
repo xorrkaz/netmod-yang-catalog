@@ -219,8 +219,8 @@ module: yang-catalog
                                +--rw modules
                                   +--rw module* [name revision organization]
                                      +--rw name                -> /catalog/modules/module/name
-                                     +--rw revision            -> /catalog/modules/module/revision
-                                     +--rw organization        -> /catalog/modules/module/organization
+                                     +--rw revision            -> deref(../name)/../revision
+                                     +--rw organization        -> deref(../revision)/../organization
                                      +--rw os-version?         string
                                      +--rw feature-set?        string
                                      +--rw os-type?            string
@@ -1043,7 +1043,7 @@ The YANG Catalog module is currently targeted to address the following use cases
                           }
                           leaf revision {
                             type leafref {
-                              path "/catalog/modules/module/revision";
+                              path "deref(../name)/../revision";
                             }
                             description
                               "Reference to a revision of the module that is contained in specific vendor,
@@ -1051,7 +1051,7 @@ The YANG Catalog module is currently targeted to address the following use cases
                           }
                           leaf organization {
                             type leafref {
-                              path "/catalog/modules/module/organization";
+                              path "deref(../revision)/../organization";
                             }
                             description
                               "Reference to the authoring organization of the module for the implemented
