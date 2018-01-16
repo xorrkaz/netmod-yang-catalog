@@ -361,7 +361,7 @@ module yang-catalog {
                         }
                         leaf revision {
                           type leafref {
-                            path "/catalog/modules/module/revision";
+                            path "deref(../name)/../revision";
                           }
                           description
                             "Reference to a revision of the module that is contained in specific vendor,
@@ -369,7 +369,7 @@ module yang-catalog {
                         }
                         leaf organization {
                           type leafref {
-                            path "/catalog/modules/module/organization";
+                            path "deref(../revision)/../organization";
                           }
                           description
                             "Reference to the authoring organization of the module for the implemented
