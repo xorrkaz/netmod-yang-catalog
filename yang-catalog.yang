@@ -26,6 +26,12 @@ module yang-catalog {
      as well as obtain a list of available modules for a given
      vendor's platform and specific software release.";
 
+  revision 2018-01-23 {
+    description
+      "* Add leafs to track expire modules
+       * Correct a bug with leafref dereferencing";
+    reference "YANG Catalog <https://yangcatalog.org>";
+  }
   revision 2017-09-26 {
     description
       "* Add leafs for tracking dependencies and dependents
