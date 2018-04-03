@@ -141,7 +141,8 @@ similar to "schema" from <xref target="RFC7895"/>). And this adds to the overall
   <section anchor="yang_catalog" title="YANG Catalog Data Model">
     <t>
    The structure of the yang-catalog.yang module described in this document is found
-   below:
+   below.  The meaning of the symbols in this and seubsequent tree diagrams in this document
+   is explained in <xref target="I-D.ietf-netmod-yang-tree-diagrams"/>:
 </t>
     <figure>
 <artwork>
@@ -171,6 +172,9 @@ module: yang-catalog
        |     +--rw module-type?                enumeration
        |     +--rw belongs-to?                 yang:yang-identifier
        |     +--rw tree-type?                  enumeration
+       |     +--rw yang-tree?                  inet:uri
+       |     +--rw expires?                    yang:date-and-time
+       |     +--rw expired?                    union
        |     +--rw submodule* [name revision]
        |     |  +--rw name        yang:yang-identifier
        |     |  +--rw revision    union
@@ -275,6 +279,9 @@ module: yang-catalog
   |     +--rw module-type?             enumeration
   |     +--rw belongs-to?              yang:yang-identifier
   |     +--rw tree-type?               enumeration
+  |     +--rw yang-tree?               inet:uri
+  |     +--rw expires?                 yang:date-and-time
+  |     +--rw expired?                 union
   |     +--rw submodule* [name revision]
   |     |  +--rw name        yang:yang-identifier
   |     |  +--rw revision    union
@@ -413,6 +420,14 @@ description
     <t>
    This enumeration mapping has been implemented for the YANG modules from IETF and BBF.
    The "maturity-level" MUST be "not-applicable" for all vendor-authored modules.
+</t>
+
+<t>
+  In addition to a module's maturity, modules that are part of works-in-progress (e.g., IETF internet drafts)
+  may expire if work ceases on the related document.  To track that, the catalog has two module leafs: "expires"
+  and "expired".  The "expires" leaf indicates a date and time when the module is expected to expire whereas the "expired"
+  leaf indicates whether or not the module has already expired.  For those modules that will never expire, the "expired"
+  leaf MUST be set to "not-applicable".
 </t>
   </section>
 
@@ -667,6 +682,15 @@ The YANG Catalog module is currently targeted to address the following use cases
      derived-semantic-version are actually meaningless: the difference
      between two YANG module semver fields should be looked at.
     </t>
+
+    <t>
+      In addition to the semantic versions, the yang-tree field points to the
+      respective module's simplified graphical representation of its model
+      as described by <xref target="I-D.ietf-netmod-yang-tree-diagrams"/>.  This
+      diagram can be compared between two revisions of the same module to visually
+      determine any structural differences when MAJOR or MINOR semantic versions
+      differ.
+    </t>
   </section>
 
 
@@ -679,7 +703,7 @@ The YANG Catalog module is currently targeted to address the following use cases
   <t>
     <figure>
 <artwork><![CDATA[
-<CODE BEGINS> file "yang-catalog@2017-09-26.yang"
+<CODE BEGINS> file "yang-catalog@2018-01-23.yang"
   module yang-catalog {
     namespace "urn:ietf:params:xml:ns:yang:yang-catalog";
     prefix yc;
@@ -708,10 +732,16 @@ The YANG Catalog module is currently targeted to address the following use cases
        as well as obtain a list of available modules for a given
        vendor's platform and specific software release.";
 
+    revision 2018-01-23 {
+      description
+        "* Add leafs to track expire modules
+         * Correct a bug with leafref dereferencing";
+      reference "YANG Catalog <https://yangcatalog.org>";
+    }
     revision 2017-09-26 {
       description
         "* Add leafs for tracking dependencies and dependents
-         * Simply the generated-from enumerated values
+         * Simplify the generated-from enumerated values
          * Refine the type for compilation-result to be an inet:uri
          * Add leafs for semantic versioning";
       reference "YANG Catalog <https://yangcatalog.org>";
@@ -781,10 +811,6 @@ The YANG Catalog module is currently targeted to address the following use cases
         "Protocol identity for RESTCONF as described in RFC 8040.";
     }
 
-    /*
-     * Typedefs
-     */
-
     typedef email-address {
       type string {
         pattern "[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+([.][a-zA-Z0-9-]+)*";
@@ -792,6 +818,10 @@ The YANG Catalog module is currently targeted to address the following use cases
       description
         "This type represents a string with an email address.";
     }
+
+    /*
+     * Typedefs
+     */
 
     typedef path {
       type string {
@@ -930,7 +960,7 @@ The YANG Catalog module is currently targeted to address the following use cases
                    be a license, additional software component, or a feature set.";
               }
               uses shared-implementation-leafs;
-              uses yang-lib-imlementation-leafs;
+              uses yang-lib-implementation-leafs;
             }
           }
         }
@@ -1058,7 +1088,7 @@ The YANG Catalog module is currently targeted to address the following use cases
                                 module.";
                           }
                           uses shared-implementation-leafs;
-                          uses yang-lib-imlementation-leafs;
+                          uses yang-lib-implementation-leafs;
                         }
                       }
                     }
@@ -1211,6 +1241,35 @@ The YANG Catalog module is currently targeted to address the following use cases
            Network Management Datastores Architecture.";
         reference "draft-dsdt-nmda-guidelines Guidelines for YANG Module Authors (NMDA)";
       }
+      leaf yang-tree {
+        when "../module-type = 'module'";
+        type inet:uri;
+        description
+          "This leaf provides a URI that points to the ASCII tree format of the module in
+           draft-ietf-netmod-yang-tree-diagrams format.";
+        reference "See draft-ietf-netmod-yang-tree-diagrams.";
+      }
+      leaf expires {
+        type yang:date-and-time;
+        description
+          "Date and time of when this module expires (if it expires).  This will typically be used for
+           modules that have not been fully ratified.";
+      }
+      leaf expired {
+        type union {
+          type boolean;
+          type enumeration {
+            enum "not-applicable" {
+              description
+                "This module is not and will not be expired.";
+            }
+          }
+        }
+        default "false";
+        description
+          "Whether or not this module has expired.  If the current date is beyond the expires date, then expired
+           should be true.";
+      }
       description
         "Grouping of YANG module metadata that extends the common list defined in the YANG
          Module Library (RFC 7895).";
@@ -1278,7 +1337,7 @@ The YANG Catalog module is currently targeted to address the following use cases
       reference "RFC7895 YANG Module Library : schema-leaf grouping";
     }
 
-    grouping yang-lib-imlementation-leafs {
+    grouping yang-lib-implementation-leafs {
       leaf-list feature {
         type yang:yang-identifier;
         description
@@ -1537,6 +1596,7 @@ No IANA action is requested.
    <?rfc include='reference.RFC.7895'?>
    <?rfc include='reference.RFC.7950'?>
    <?rfc include='reference.RFC.8199'?>
+   <?rfc include="reference.I-D.ietf-netmod-yang-tree-diagrams"?>
    <reference anchor="semver" target="https://www.semver.org">
       <front>
         <title>Semantic Versioning 2.0.0</title>
@@ -1547,7 +1607,7 @@ No IANA action is requested.
 </references>
 <references title="Informative References">
    <?rfc include='reference.I-D.openconfig-netmod-model-catalog'?>
-   <?rfc include='reference.I-D.ietf-netmod-revised-datastores'?>
+   <?rfc include='reference.RFC.8342'?>
 </references>
 <?rfc needLines="100"?>
 <section title="Acknowledgments">
@@ -1572,7 +1632,7 @@ No IANA action is requested.
     <t>Normalize enums to be lowercase.</t>
     <t>Use identities for protocols instead of an enumeration.</t>
     <t>Make conformance-type optional as not all vendors implement <xref target="RFC7895"/>.</t>
-    <t>Add a leaf for tree-type based on <xref target="I-D.ietf-netmod-revised-datastores"/>.</t>
+    <t>Add a leaf for tree-type based on <xref target="RFC8342"/>.</t>
     <t>Add a reference to contributing to the YANG Catalog at yangcatalog.org.</t>
     <t>Various wording and style changes to the document text.</t>
   </list></t>
@@ -1587,6 +1647,15 @@ No IANA action is requested.
     <t>Add leafs for semantic versioning.</t>
     <t>Reorder the organization leaf to be with other module keys.</t>
     <t>Add text to describe generated-from and semantic versioning.</t>
+  </list></t>
+
+  <t>Draft -02 to -03:</t>
+
+  <t><list style="symbols">
+    <t>Add a reference to I-D.ietf-netmod-yang-tree-diagrams.</t>
+    <t>Document the new yang-tree node in the catalog.</t>
+    <t>Document the new expires and expired leafs and their relation to maturity.</t>
+    <t>Updtae NMDA reference to point to new RFC number.</t>
   </list></t>
 </section>
 </back>
