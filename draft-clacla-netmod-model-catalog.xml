@@ -18,7 +18,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" ipr="trust200902" docName="draft-clacla-netmod-model-catalog-02">
+<rfc category="std" ipr="trust200902" docName="draft-clacla-netmod-model-catalog-03">
 <front>
 <title abbrev="YANG Catalog">YANG module for yangcatalog.org</title>
 <author initials="J." surname="Clarke" fullname="Joe Clarke">
