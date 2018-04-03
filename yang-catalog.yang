@@ -1,4 +1,5 @@
 module yang-catalog {
+  yang-version 1.1;
   namespace "urn:ietf:params:xml:ns:yang:yang-catalog";
   prefix yc;
 
@@ -16,7 +17,7 @@ module yang-catalog {
     "yangcatalog.org";
   contact
     "Benoit Claise <bclaise@cisco.com>
-     
+
      Joe Clarke <jclarke@cisco.com>";
   description
     "This module contains metadata pertinent to each YANG module, as
@@ -26,6 +27,12 @@ module yang-catalog {
      as well as obtain a list of available modules for a given
      vendor's platform and specific software release.";
 
+  revision 2018-04-03 {
+    description
+      "Bump the YANG version number to 1.1 for the deref XPath
+       function.";
+    reference "YANG Catalog <https://yangcatalog.org>";
+  }
   revision 2018-01-23 {
     description
       "* Add leafs to track expire modules
@@ -49,16 +56,16 @@ module yang-catalog {
   revision 2017-07-28 {
     description
       "* Revert config false nodes as we need to be able to set these via <edit-config>
-       
+
        * Make conformance-type optional as not all vendors implement yang-library
-       
+
        * Re-add the path typedef";
     reference "YANG Catalog <https://yangcatalog.org>";
   }
   revision 2017-07-26 {
     description
       "A number of improvements based on YANG Doctor review:
-       
+
        * Remove references to 'server' in leafs describing YANG data
        * Fold the augmentation module leafs directly under /catalog/modules/module
        * Use identities for protocols instead of an emumeration
@@ -119,7 +126,7 @@ module yang-catalog {
 
   typedef path {
     type string {
-      pattern "([A-Za-z]:|[\\w-]+(\\.[\\w-]+)*)?(([/\\\\][\\w@.-]+)+)";
+      pattern '([A-Za-z]:|[\w-]+(\.[\w-]+)*)?(([/\\][\w@.-]+)+)';
     }
     description
       "This type represents a string with path to the file.";
@@ -127,22 +134,22 @@ module yang-catalog {
 
   typedef semver {
     type string {
-      pattern "[0-9]+\\.[0-9]+\\.[0-9]+";
+      pattern '[0-9]+\.[0-9]+\.[0-9]+';
     }
     description
       "A semantic version in the format of x.y.z, where:
-       
+
        x = the major version number
        y = the minor version number
        z = the patch version number
-       
+
        Changes to the major version number denote backwards-incompatible
        changes between two revisions of the same module.
-       
+
        Changes to the minor version number indicate there have been new
        backwards-compatible features introduced in the later version of
        a module.
-       
+
        Changes to the patch version indicate bug fixes between two
        versions of a module.";
     reference "Semantic Versioning 2.0.0 <http://semver.org/>";
@@ -399,27 +406,27 @@ module yang-catalog {
     uses shared-module-leafs;
     leaf compilation-status {
       type enumeration {
-        enum "passed" {
+        enum passed {
           description
             "All compilers were able to compile this YANG module without
              any errors or warnings.";
         }
-        enum "passed-with-warnings" {
+        enum passed-with-warnings {
           description
             "All compilers were able to compile this YANG module without
              any errors, but at least one of them caught a warning.";
         }
-        enum "failed" {
+        enum failed {
           description
             "At least one of compilers found an error while
              compiling this YANG module.";
         }
-        enum "pending" {
+        enum pending {
           description
             "The module was just added to the catalog and compilation testing is still
              in progress.";
         }
-        enum "unknown" {
+        enum unknown {
           description
             "There is not sufficient information about compilation status.  This Could
              mean compilation crashed causing it not to complete fully.";
@@ -446,11 +453,11 @@ module yang-catalog {
     }
     leaf yang-version {
       type enumeration {
-        enum "1.0" {
+        enum 1.0 {
           description
             "YANG version 1.0 as defined in RFC 6020.";
         }
-        enum "1.1" {
+        enum 1.1 {
           description
             "YANG version 1.1 as defined in RFC 7950.";
         }
@@ -480,11 +487,11 @@ module yang-catalog {
     }
     leaf module-type {
       type enumeration {
-        enum "module" {
+        enum module {
           description
             "If YANG file contains module.";
         }
-        enum "submodule" {
+        enum submodule {
           description
             "If YANG file contains sub-module.";
         }
@@ -503,29 +510,29 @@ module yang-catalog {
     }
     leaf tree-type {
       type enumeration {
-        enum "split" {
+        enum split {
           description
             "This module uses a split config/operational state layout.";
         }
-        enum "nmda-compatible" {
+        enum nmda-compatible {
           description
             "This module is compatible with the Network Management Datastores
              Architecture (NMDA) and combines config and operational state nodes.";
         }
-        enum "transitional-extra" {
+        enum transitional-extra {
           description
             "This module is derived as a '-state' module to allow for transitioning
              to a full NMDA-compliant tree structure.";
         }
-        enum "openconfig" {
+        enum openconfig {
           description
             "This module uses the Openconfig data element layout.";
         }
-        enum "unclassified" {
+        enum unclassified {
           description
             "This module does not belong to any category or can't be determined.";
         }
-        enum "not-applicable" {
+        enum not-applicable {
           description
             "This module is not applicable. For example, because the YANG module only contains typedefs, groupings, or is a submodule";
         }
@@ -553,7 +560,7 @@ module yang-catalog {
       type union {
         type boolean;
         type enumeration {
-          enum "not-applicable" {
+          enum not-applicable {
             description
               "This module is not and will not be expired.";
           }
@@ -656,7 +663,7 @@ module yang-catalog {
     }
     leaf conformance-type {
       type enumeration {
-        enum "implement" {
+        enum implement {
           description
             "Indicates that the server implements one or more
              protocol-accessible objects defined in the YANG module
@@ -669,7 +676,7 @@ module yang-catalog {
              For YANG version 1 modules, there SHOULD NOT be more
              than one module entry for a particular module name.";
         }
-        enum "import" {
+        enum import {
           description
             "Indicates that the server imports reusable definitions
              from the specified revision of the module but does
@@ -723,16 +730,16 @@ module yang-catalog {
   grouping shared-module-leafs {
     leaf generated-from {
       type enumeration {
-        enum "mib" {
+        enum mib {
           description
             "Module generated from Structure of Management Information (SMI)
              MIB per RFC6643.";
         }
-        enum "not-applicable" {
+        enum not-applicable {
           description
             "Module was not generated but it was authored manually.";
         }
-        enum "native" {
+        enum native {
           description
             "Module generated from platform internal,
              proprietary structure, or code.";
@@ -746,20 +753,20 @@ module yang-catalog {
     }
     leaf maturity-level {
       type enumeration {
-        enum "ratified" {
+        enum ratified {
           description
             "Maturity of a module that is fully approved (e.g., a standard).";
         }
-        enum "adopted" {
+        enum adopted {
           description
             "Maturity of a module that is actively being developed by a organization towards ratification.";
         }
-        enum "initial" {
+        enum initial {
           description
             "Maturity of a module that has been initially created, but has no official
              organization-level status.";
         }
-        enum "not-applicable" {
+        enum not-applicable {
           description
             "The maturity level is not used for vendor-supplied models, and thus all vendor
              modules will have a maturity of not-applicable";
@@ -789,23 +796,23 @@ module yang-catalog {
     }
     leaf module-classification {
       type enumeration {
-        enum "network-service" {
+        enum network-service {
           description
             "Network Service YANG Module that describes the configuration, state
              data, operations, and notifications of abstract representations of
              services implemented on one or multiple network elements.";
         }
-        enum "network-element" {
+        enum network-element {
           description
             "Network Element YANG Module that describes the configuration, state
              data, operations, and notifications of specific device-centric
              technologies or features.";
         }
-        enum "unknown" {
+        enum unknown {
           description
             "In case that there is not sufficient information about how to classify the module.";
         }
-        enum "not-applicable" {
+        enum not-applicable {
           description
             "The YANG module abstraction type is neither a Network Service YANG Module
              nor a Network Element YANG Module.";
